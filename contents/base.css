@@ -14,3 +14,13 @@ body.plasmo-sidebar-show * {
   top: 0px;
   right: 0px;
 }
+
+#bookmark:hover {
+  background-color: red;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.375rem;
+}

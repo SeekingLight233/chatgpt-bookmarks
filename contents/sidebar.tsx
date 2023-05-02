@@ -1,12 +1,9 @@
-import iconBase64 from "data-base64:~assets/icon.png"
 import cssText from "data-text:~/contents/sidebar.css"
 import type { PlasmoCSConfig } from "plasmo"
 import { useEffect, useState } from "react"
-
-// Inject to the webpage itself
-import "./sidebar-base.css"
+import "./base.css"
 import { createStyles } from "~utils/base"
-import Arrow from "~components/Arrow"
+import ArrowIcon from "~components/ArrowIcon"
 import theme from "~utils/theme"
 
 export const config: PlasmoCSConfig = {
@@ -23,7 +20,7 @@ export const getStyle = () => {
 export const getShadowHostId = () => "plasmo-sidebar"
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     document.body.classList.toggle("plasmo-sidebar-show", isOpen)
@@ -34,10 +31,10 @@ const Sidebar = () => {
   return (
     <div id="sidebar" className={isOpen ? "open" : "closed"}>
       <div style={{ ...styles.toggleBtn, backgroundColor: isOpen ? theme.bgColor : theme.tintColor }} onClick={() => setIsOpen(!isOpen)}>
-        <Arrow
+        <ArrowIcon
           direction={isOpen ? "right" : "left"}
           color={isOpen ? theme.tintColor : theme.bgColor}
-        ></Arrow>
+        ></ArrowIcon>
       </div>
     </div>
   )
@@ -59,3 +56,9 @@ const styles = createStyles({
 })
 
 export default Sidebar
+
+const bookmark = {
+  id: 11,
+  sessionId: "41be8183-ecd0-4b09-9606-9f70c871d918",
+  title:"如何开启Plasmo的侧边栏",
+}

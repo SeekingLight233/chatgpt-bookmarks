@@ -8,7 +8,7 @@ interface ArrowProps {
   size?: number
 }
 
-function Arrow(props: ArrowProps) {
+function ArrowIcon(props: ArrowProps) {
 
   const { color, direction = "right", size = 128 } = props
 
@@ -33,4 +33,4 @@ function Arrow(props: ArrowProps) {
   )
 }
 
-export default Arrow
+export default ArrowIcon
