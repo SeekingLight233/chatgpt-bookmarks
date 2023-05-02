@@ -1,19 +1,17 @@
 #sidebar {
   position: absolute;
   background-color: #202123;
-  width: var(--plasmo-sidebar-width);
+  width: var(--bookmark-sidebar-width);
   height: 100vh;
-
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
   transition: all 0.5s ease;
 }
 
 #sidebar.open {
-  left: calc(var(--plasmo-sidebar-width) * -1);
+  left: calc(var(--bookmark-sidebar-width) * -1);
 }
 
 #sidebar.closed {

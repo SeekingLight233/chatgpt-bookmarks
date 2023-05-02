@@ -54,6 +54,7 @@ const styles = createStyles({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: "0.375rem",
+    cursor: "pointer",
   }
 })
 

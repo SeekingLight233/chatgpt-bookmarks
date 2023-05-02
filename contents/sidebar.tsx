@@ -17,13 +17,13 @@ export const getStyle = () => {
   return style
 }
 
-export const getShadowHostId = () => "plasmo-sidebar"
+export const getShadowHostId = () => "bookmark-sidebar"
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    document.body.classList.toggle("plasmo-sidebar-show", isOpen)
+    document.body.classList.toggle("bookmark-sidebar-show", isOpen)
   }, [isOpen])
 
   console.log("theme.tintColor",theme.tintColor);
