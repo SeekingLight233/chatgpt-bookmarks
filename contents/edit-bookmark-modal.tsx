@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { PlasmoCSConfig } from 'plasmo';
 import './base.css';
 import { createStyles } from '~utils/base';
+import { appStore, setShowEditBookmarkModal } from '~model/app';
 
 export const config: PlasmoCSConfig = {
   matches: ['https://chat.openai.com/*'],
@@ -12,6 +13,8 @@ export const getShadowHostId = () => 'edit-bookmark-modal';
 const EditBookmarkModal = () => {
   const [title, setTitle] = useState('');
 
+  const { showEditBookmarkModal } = appStore
+
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(event.target.value);
   };
@@ -21,23 +24,26 @@ const EditBookmarkModal = () => {
   };
 
   return (
-    <div style={styles.modal}>
-      <div style={styles.modalContent}>
-        <div style={styles.header}>
-          <span>Provide bookmark title</span>
-          <button onClick={() => console.log('Cancel clicked')}>Cancel</button>
+    <>
+      {showEditBookmarkModal && <div style={styles.modal}>
+        <div style={styles.modalContent}>
+          <div style={styles.header}>
+            <span>Provide bookmark title</span>
+            <button onClick={() => setShowEditBookmarkModal(false)}>Cancel</button>
+          </div>
+          <textarea
+            style={styles.textarea}
+            value={title}
+            onChange={handleInputChange}
+            rows={5}
+          />
+          <button style={styles.confirmButton} onClick={handleSubmit}>
+            Confirm
+          </button>
         </div>
-        <textarea
-          style={styles.textarea}
-          value={title}
-          onChange={handleInputChange}
-          rows={5}
-        />
-        <button style={styles.confirmButton} onClick={handleSubmit}>
-          Confirm
-        </button>
-      </div>
-    </div>
+      </div>}
+    </>
+
   );
 };
 

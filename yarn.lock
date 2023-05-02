@@ -3982,6 +3982,13 @@ responselike@^3.0.0:
   dependencies:
     lowercase-keys "^3.0.0"
 
+resso@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/resso/-/resso-0.14.0.tgz#2ff354886ce2b3a97f74b117c0e6f3b71306543f"
+  integrity sha512-QKe0pkjDNlJ+8CyFqDZb+jPTNR7N3u6wEBNtX8mqgW/KHovmfhrRE1MQQgDzAI7rhU/SFFp9BiQ3XnAnJD8JcQ==
+  dependencies:
+    use-sync-external-store "^1.2.0"
+
 restore-cursor@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/restore-cursor/-/restore-cursor-4.0.0.tgz#519560a4318975096def6e609d44100edaa4ccb9"
@@ -4503,6 +4510,11 @@ upper-case@^2.0.2:
   integrity sha512-KgdgDGJt2TpuwBUIjgG6lzw2GWFRCW9Qkfkiv0DxqHHLYJHmtmdUIKcZd8rHgFSjopVTlw6ggzCm1b8MFQwikg==
   dependencies:
     tslib "^2.0.3"
+
+use-sync-external-store@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
+  integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
 
 util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   version "1.0.2"

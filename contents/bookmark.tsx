@@ -4,6 +4,7 @@ import { createStyles } from "~utils/base";
 import "./base.css"
 import { useState } from "react";
 import theme from "~utils/theme";
+import { setShowEditBookmarkModal } from "~model/app";
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
@@ -38,6 +39,7 @@ const Bookmark = () => {
 
   return <div
     onClick={() => {
+      setShowEditBookmarkModal(true)
     }}
     onMouseEnter={handleMouseEnter}
     onMouseLeave={handleMouseLeave}
