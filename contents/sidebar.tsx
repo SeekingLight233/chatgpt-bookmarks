@@ -1,12 +1,13 @@
 import cssText from "data-text:~/contents/sidebar.css"
 import type { PlasmoCSConfig } from "plasmo"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import "./base.css"
 import { createStyles } from "~utils/base"
 import ArrowIcon from "~components/ArrowIcon"
 import theme from "~utils/theme"
 import { bookmarkStore } from "~model/bookmark"
 import BookmarkItem from "~components/BookmarkItem"
+import { getBottomToolsDoms } from "~utils/dom"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
@@ -31,6 +32,15 @@ const Sidebar = () => {
 
   console.log("theme.tintColor", theme.tintColor);
 
+  const handleClickBookmark = (bookmarkId) => {
+    const conversationDom = getConversationDomById(bookmarkId);
+    if (conversationDom) {
+      conversationDom.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      console.error(`Element with id ${bookmarkId} not found.`);
+    }
+  }
+
   return (
     <div id="sidebar" className={isOpen ? "open" : "closed"}>
       <div style={{ ...styles.toggleBtn, backgroundColor: isOpen ? theme.bgColor : theme.tintColor }} onClick={() => setIsOpen(!isOpen)}>
@@ -43,9 +53,10 @@ const Sidebar = () => {
       <div style={styles.bookmarksArea}>
         <div style={styles.scrollArea}>
           {
-            list.map((bookmark,idx) =>
+            list.map((bookmark, idx) =>
               <BookmarkItem
                 key={idx}
+                onClick={handleClickBookmark}
                 onEdit={() => { }}
                 onDelete={() => { }}
                 {...bookmark}
@@ -56,6 +67,13 @@ const Sidebar = () => {
       </div>
     </div>
   )
+}
+
+function getConversationDomById(bookmark: number) {
+  const btmToolsDoms = getBottomToolsDoms()
+  const btmToolsDom = btmToolsDoms[bookmark];
+  const targetDom = btmToolsDom.parentElement.parentElement;
+  return targetDom;
 }
 
 const styles = createStyles({

@@ -11,12 +11,13 @@ import theme from '~utils/theme';
 interface BookmarkItemProps extends Bookmark {
   onEdit: (bookmark: Bookmark) => void;
   onDelete: (bookmark: Bookmark) => void;
+  onClick: (bookmarkId: number) => void;
 }
 
 const BookmarkItem: React.FC<BookmarkItemProps> = (props) => {
-  const { onEdit, onDelete, title, sessionLink, bookmarkId } = props;
+  const { onEdit, onDelete, onClick, title, sessionLink, bookmarkId, } = props;
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
-  return <div style={{ ...styles.item, backgroundColor: isHovered ? theme.bookmarkHoverColor : "" }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+  return <div onClick={() => onClick(bookmarkId)} style={{ ...styles.item, backgroundColor: isHovered ? theme.bookmarkHoverColor : "" }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
     <BookmarkIcon style={styles.icon} color={"#fff"}></BookmarkIcon>
     <span style={styles.title}>{title}</span>
     <EditIcon style={styles.rightIcon}></EditIcon>
@@ -35,6 +36,7 @@ const styles = createStyles({
     flexDirection: "row",
     alignItems: "center",
     fontSize: 14,
+    marginLeft: "5%"
   },
   icon: {
     marginLeft: 10,

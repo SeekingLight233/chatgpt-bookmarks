@@ -7,6 +7,8 @@ import theme from "~utils/theme";
 import { setShowEditBookmarkModal } from "~model/app";
 import { bookmarkStore } from "~model/bookmark";
 import { useHover } from "~utils/hooks/useHover";
+import { getBottomToolsDoms } from "~utils/dom";
+
 
 
 const Bookmark = () => {
@@ -49,11 +51,11 @@ type ElementWithbookmarkId = Element & { bookmarkId?: number }
 
 export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
 
-  const elements = document.querySelectorAll('.flex.justify-between.lg\\:block');
+  const btmToolsDoms = getBottomToolsDoms()
 
   const nodeList: Element[] = [];
 
-  elements.forEach((element, idx) => {
+  btmToolsDoms.forEach((element, idx) => {
     const lastBtn = element.querySelector('div:first-child button:last-child');
     const isAnswer = idx % 2 !== 0;
     if (lastBtn && isAnswer) {
