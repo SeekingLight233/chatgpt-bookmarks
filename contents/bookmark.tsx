@@ -2,44 +2,24 @@ import type { PlasmoCSConfig, PlasmoGetInlineAnchorList } from "plasmo"
 import BookmarkIcon from "~components/BookmarkIcon";
 import { createStyles } from "~utils/base";
 import "./base.css"
-import { useState } from "react";
+import { useRef, useState } from "react";
 import theme from "~utils/theme";
 import { setShowEditBookmarkModal } from "~model/app";
-
-export const config: PlasmoCSConfig = {
-  matches: ["https://chat.openai.com/*"]
-}
-
-export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
-
-  const elements = document.querySelectorAll('.flex.justify-between.lg\\:block');
-
-  const nodeList: Element[] = [];
-
-  elements.forEach((element) => {
-    const lastBtn = element.querySelector('div:first-child button:last-child');
-    lastBtn && nodeList.push(lastBtn);
-  })
-
-  return nodeList as unknown as NodeList
-}
+import { bookmarkStore } from "~model/bookmark";
+import { useHover } from "~utils/hooks/useHover";
 
 
 const Bookmark = () => {
-  // hover not working for some reason, just work around it
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
+  const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
+  const domRef = useRef<HTMLDivElement>(null)
 
   return <div
+    ref={domRef}
     onClick={() => {
-      setShowEditBookmarkModal(true)
+      const curBookmarkDom = domRef.current;
+      const bookmarkId = getbookmarkIdByDom(curBookmarkDom);
+      if (bookmarkId == null) return new Error("can not find bookmarkId");
+      bookmarkStore.onEdit(bookmarkId)
     }}
     onMouseEnter={handleMouseEnter}
     onMouseLeave={handleMouseLeave}
@@ -59,5 +39,40 @@ const styles = createStyles({
     cursor: "pointer",
   }
 })
+
+
+export const config: PlasmoCSConfig = {
+  matches: ["https://chat.openai.com/*"]
+}
+
+type ElementWithbookmarkId = Element & { bookmarkId?: number }
+
+export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
+
+  const elements = document.querySelectorAll('.flex.justify-between.lg\\:block');
+
+  const nodeList: Element[] = [];
+
+  elements.forEach((element, idx) => {
+    const lastBtn = element.querySelector('div:first-child button:last-child');
+    const isAnswer = idx % 2 !== 0;
+    if (lastBtn && isAnswer) {
+      // we need this id for locating every conversation
+      (lastBtn.parentElement as ElementWithbookmarkId).bookmarkId = idx;
+      nodeList.push(lastBtn);
+    }
+  })
+
+  return nodeList as unknown as NodeList
+}
+
+
+
+const getbookmarkIdByDom = (dom: ElementWithbookmarkId) => {
+  const rootParent = (dom.getRootNode() as ShadowRoot).host.parentElement as ElementWithbookmarkId
+  return rootParent?.bookmarkId
+}
+
+
 
 export default Bookmark

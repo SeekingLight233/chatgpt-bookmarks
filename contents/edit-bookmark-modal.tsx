@@ -3,6 +3,7 @@ import type { PlasmoCSConfig } from 'plasmo';
 import './base.css';
 import { createStyles } from '~utils/base';
 import { appStore, setShowEditBookmarkModal } from '~model/app';
+import { bookmarkStore, setTitle } from '~model/bookmark';
 
 export const config: PlasmoCSConfig = {
   matches: ['https://chat.openai.com/*'],
@@ -11,7 +12,8 @@ export const config: PlasmoCSConfig = {
 export const getShadowHostId = () => 'edit-bookmark-modal';
 
 const EditBookmarkModal = () => {
-  const [title, setTitle] = useState('');
+
+  const { curTitle, curSessionLink, curBookmarkId, onSave } = bookmarkStore;
 
   const { showEditBookmarkModal } = appStore
 
@@ -20,7 +22,11 @@ const EditBookmarkModal = () => {
   };
 
   const handleSubmit = () => {
-    console.log('Title:', title);
+    onSave({
+      title: curTitle,
+      sessionLink: curSessionLink,
+      bookmarkId: curBookmarkId,
+    });
   };
 
   return (
@@ -33,7 +39,7 @@ const EditBookmarkModal = () => {
           </div>
           <textarea
             style={styles.textarea}
-            value={title}
+            value={curTitle}
             onChange={handleInputChange}
             rows={5}
           />
