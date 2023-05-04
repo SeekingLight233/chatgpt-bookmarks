@@ -5,9 +5,12 @@ import "./base.css"
 import { createStyles } from "~utils/base"
 import ArrowIcon from "~components/ArrowIcon"
 import theme from "~utils/theme"
-import { bookmarkStore } from "~model/bookmark"
+import { bookmarkStore, type Bookmark } from "~model/bookmark"
 import BookmarkItem from "~components/BookmarkItem"
-import { getBottomToolsDoms } from "~utils/dom"
+import { domIdMap, getBottomToolsDoms, isPartiallyInViewport } from "~utils/dom"
+import { useMount, useThrottleFn } from "ahooks"
+
+
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
@@ -24,22 +27,46 @@ export const getShadowHostId = () => "bookmark-sidebar"
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const [activeId, setActiveId] = useState(-1)
   const { list } = bookmarkStore
 
   useEffect(() => {
     document.body.classList.toggle("bookmark-sidebar-show", isOpen)
   }, [isOpen])
 
-  console.log("theme.tintColor", theme.tintColor);
 
   const handleClickBookmark = (bookmarkId) => {
-    const conversationDom = getConversationDomById(bookmarkId);
+    const conversationDom = domIdMap.getDomById(bookmarkId)
     if (conversationDom) {
       conversationDom.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
       console.error(`Element with id ${bookmarkId} not found.`);
     }
   }
+
+  const { run: runSetActiveId } = useThrottleFn(
+    () => {
+      const newActiveId = getActiveId(list);
+      setActiveId(newActiveId)
+    },
+    { wait: 200 },
+  );
+
+  const scrollDom = document.querySelector("main")?.firstChild?.firstChild?.firstChild;
+
+  useEffect(() => {
+    if (scrollDom) {
+      scrollDom.addEventListener("scroll", () => {
+        runSetActiveId()
+      })
+    }
+
+    return () => {
+      if (scrollDom) {
+        scrollDom.removeEventListener("scroll", () => { })
+      }
+    }
+  }, [scrollDom])
 
   return (
     <div id="sidebar" className={isOpen ? "open" : "closed"}>
@@ -58,6 +85,7 @@ const Sidebar = () => {
                 key={idx}
                 onClick={handleClickBookmark}
                 onEdit={() => { }}
+                active={activeId === bookmark.bookmarkId}
                 onDelete={() => { }}
                 {...bookmark}
               />)
@@ -69,11 +97,15 @@ const Sidebar = () => {
   )
 }
 
-function getConversationDomById(bookmark: number) {
-  const btmToolsDoms = getBottomToolsDoms()
-  const btmToolsDom = btmToolsDoms[bookmark];
-  const targetDom = btmToolsDom.parentElement.parentElement;
-  return targetDom;
+function getActiveId(list: Bookmark[]) {
+  return list.find((bookmark) => {
+    const conversationDom = domIdMap.getDomById(bookmark.bookmarkId);
+    return isPartiallyInViewport(conversationDom)
+  })?.bookmarkId ?? -1
+}
+
+function getConversationDomById(bookmarkId: number) {
+  return domIdMap.getDomById(bookmarkId)
 }
 
 const styles = createStyles({
@@ -105,3 +137,4 @@ const styles = createStyles({
 })
 
 export default Sidebar
+
