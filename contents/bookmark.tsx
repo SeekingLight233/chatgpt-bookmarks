@@ -1,7 +1,7 @@
 import type { PlasmoCSConfig, PlasmoGetInlineAnchorList } from "plasmo"
 import BookmarkIcon from "~components/BookmarkIcon";
 import { createStyles } from "~utils/base";
-import "./base.css"
+import "./styles/base.css";
 import { useRef, useState } from "react";
 import theme from "~utils/theme";
 import { setShowEditBookmarkModal } from "~model/app";

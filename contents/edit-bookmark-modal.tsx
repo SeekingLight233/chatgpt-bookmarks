@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { PlasmoCSConfig } from 'plasmo';
-import './base.css';
+import "./styles/base.css";
 import { createStyles } from '~utils/base';
 import { appStore, setShowEditBookmarkModal } from '~model/app';
 import { bookmarkStore, setTitle } from '~model/bookmark';
