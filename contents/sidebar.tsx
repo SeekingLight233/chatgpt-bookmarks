@@ -47,12 +47,15 @@ const Sidebar = () => {
   const { run: runSetActiveId } = useThrottleFn(
     () => {
       const newActiveId = getActiveId(list);
+      // console.log("newActiveId===", newActiveId)
       setActiveId(newActiveId)
     },
     { wait: 200 },
   );
 
-  const scrollDom = document.querySelector("main")?.firstChild?.firstChild?.firstChild;
+  const scrollDom = document.querySelectorAll('div[class*="react-scroll-to-bottom"]')[1];
+  // console.log("scrollDom===", scrollDom);
+
 
   useEffect(() => {
     if (scrollDom) {
