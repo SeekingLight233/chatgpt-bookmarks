@@ -59,7 +59,7 @@ const styles = createStyles({
     width: "65%",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
-    overflowX: "auto",
+    overflow:"hidden",
     display: "inline-block",
   },
 })
