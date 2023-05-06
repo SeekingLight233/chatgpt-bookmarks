@@ -19,7 +19,7 @@ class Storage {
     });
   }
 
-  getAll(): Promise<any> {
+  getAll(): Promise<Record<string, Bookmark>> {
     return new Promise((resolve, reject) => {
       this.storage.get(null, (result) => {
         if (chrome.runtime.lastError) {
@@ -34,6 +34,18 @@ class Storage {
   set(key: string, value: Bookmark): Promise<void> {
     return new Promise((resolve, reject) => {
       this.storage.set({ [key]: value }, () => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  remove(key: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.storage.remove(key, () => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
         } else {

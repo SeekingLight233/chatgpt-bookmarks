@@ -9,6 +9,7 @@ import { bookmarkStore, type Bookmark } from "~model/bookmark"
 import BookmarkItem from "~components/BookmarkItem"
 import { domIdMap, getBottomToolsDoms, isPartiallyInViewport } from "~utils/dom"
 import { useMount, useThrottleFn } from "ahooks"
+import storage from "~utils/storage"
 
 
 
@@ -29,6 +30,19 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [activeId, setActiveId] = useState(-1)
   const { list } = bookmarkStore
+
+  useMount(() => {
+    // const handleRouteChange = () => {
+    //   console.log('Route changed:', window.location.pathname);
+    // };
+
+    // window.addEventListener('popstate', handleRouteChange);
+
+    // return () => {
+    //   window.removeEventListener('popstate', handleRouteChange);
+    // };
+    // bookmarkStore.initList()
+  })
 
   useEffect(() => {
     document.body.classList.toggle("bookmark-sidebar-show", isOpen)
