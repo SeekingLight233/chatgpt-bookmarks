@@ -13,7 +13,7 @@ export const getShadowHostId = () => 'edit-bookmark-modal';
 
 const EditBookmarkModal = () => {
 
-  const { curTitle, curSessionLink, curBookmarkId, onSave } = bookmarkStore;
+  const { curTitle, curSessionId, curBookmarkId, onSave } = bookmarkStore;
 
   const { showEditBookmarkModal } = appStore
 
@@ -24,7 +24,7 @@ const EditBookmarkModal = () => {
   const handleSubmit = () => {
     onSave({
       title: curTitle,
-      sessionLink: curSessionLink,
+      sessionId: curSessionId,
       bookmarkId: curBookmarkId,
     });
   };

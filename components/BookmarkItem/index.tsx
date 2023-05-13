@@ -18,7 +18,7 @@ interface BookmarkItemProps extends Bookmark {
 }
 
 const BookmarkItem: React.FC<BookmarkItemProps> = (props) => {
-  const { onEdit, onDelete, onClick, title, sessionLink, bookmarkId,active = false } = props;
+  const { onEdit, onDelete, onClick, title, sessionId, bookmarkId,active = false } = props;
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
 
   const backgroundColor = useMemo(() => {

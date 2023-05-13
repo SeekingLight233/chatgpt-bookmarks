@@ -4,11 +4,12 @@ import Bookmark from '~contents/bookmark';
 import { setShowEditBookmarkModal } from './app';
 import storage from '~utils/storage';
 import { filterKeysByString } from '~utils/base';
+import { baseUrl } from '~config';
 
 export interface Bookmark {
   bookmarkId: number,
   title: string,
-  sessionLink: string
+  sessionId: string
 }
 
 export const bookmarkStore = resso({
@@ -25,13 +26,13 @@ export const bookmarkStore = resso({
     // },
   ] as Bookmark[],
   curTitle: "",
-  curSessionLink: "",
+  curSessionId: "",
   curBookmarkId: null,
 
   initList: () => {
     storage.getAll().then((allBookmarkObj) => {
-      const sessionLink = getSessionLink();
-      const filteredBookmarkObj = filterKeysByString<Bookmark>(allBookmarkObj, sessionLink);
+      const sessionId = getSessionId();
+      const filteredBookmarkObj = filterKeysByString<Bookmark>(allBookmarkObj, sessionId);
       const newList = Object.values(filteredBookmarkObj);
       console.log("newList===", newList)
       bookmarkStore.list = newList;
@@ -43,14 +44,14 @@ export const bookmarkStore = resso({
   onEdit: (bookmarkId: number) => {
     setShowEditBookmarkModal(true);
     bookmarkStore.curBookmarkId = bookmarkId;
-    const sessionLink = getSessionLink();
-    bookmarkStore.curSessionLink = sessionLink
+    const sessionId = getSessionId();
+    bookmarkStore.curSessionId = sessionId
   },
   onSave: (bookmark: Bookmark) => {
-    const { sessionLink, bookmarkId } = bookmark
+    const { sessionId, bookmarkId } = bookmark
     console.log("onSave", bookmark)
     bookmarkStore.list.push(bookmark);
-    const key = sessionLink + "#" + bookmarkId;
+    const key = sessionId + "#" + bookmarkId;
     storage.set(key, bookmark).then(() => {
       console.log("save success")
     })
@@ -65,4 +66,10 @@ export const setTitle = (newTitle: string) => {
 function getSessionLink() {
   const url = window.location.href.split("#")[0];
   return url
+}
+
+function getSessionId() {
+  const link = getSessionLink();
+  const sessionId = link.replace(baseUrl, "");
+  return sessionId
 }
