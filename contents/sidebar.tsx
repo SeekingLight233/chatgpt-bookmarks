@@ -32,16 +32,13 @@ const Sidebar = () => {
   const { list } = bookmarkStore
 
   useMount(() => {
-    // const handleRouteChange = () => {
-    //   console.log('Route changed:', window.location.pathname);
-    // };
-
-    // window.addEventListener('popstate', handleRouteChange);
-
-    // return () => {
-    //   window.removeEventListener('popstate', handleRouteChange);
-    // };
-    // bookmarkStore.initList()
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+      if (request.message === 'urlChange') {
+        console.log('URL changed to ' + request.url);
+      }
+    });
+    
+    bookmarkStore.initList()
   })
 
   useEffect(() => {
