@@ -5,6 +5,7 @@ import { setShowEditBookmarkModal } from './app';
 import storage from '~utils/storage';
 import { filterKeysByString } from '~utils/base';
 import { baseUrl } from '~config';
+import { getSessionId } from '~contents/sidebar';
 
 export interface Bookmark {
   bookmarkId: number,
@@ -31,11 +32,10 @@ export const bookmarkStore = resso({
 
   initList: () => {
     storage.getAll().then((allBookmarkObj) => {
-      const sessionId = getSessionId();
-      const filteredBookmarkObj = filterKeysByString<Bookmark>(allBookmarkObj, sessionId);
-      const newList = Object.values(filteredBookmarkObj);
-      console.log("newList===", newList)
-      bookmarkStore.list = newList;
+      const initList = Object.values(allBookmarkObj);
+      console.log("initList===", initList, allBookmarkObj)
+      bookmarkStore.list = initList;
+      bookmarkStore.curSessionId = getSessionId();
     }).catch((err) => {
       console.error("get all err", err)
     })
@@ -63,13 +63,4 @@ export const setTitle = (newTitle: string) => {
 }
 
 
-function getSessionLink() {
-  const url = window.location.href.split("#")[0];
-  return url
-}
 
-function getSessionId() {
-  const link = getSessionLink();
-  const sessionId = link.replace(baseUrl, "");
-  return sessionId
-}

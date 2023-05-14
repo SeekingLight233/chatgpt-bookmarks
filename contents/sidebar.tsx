@@ -10,6 +10,7 @@ import BookmarkItem from "~components/BookmarkItem"
 import { domIdMap, getBottomToolsDoms, isPartiallyInViewport } from "~utils/dom"
 import { useMount, useThrottleFn } from "ahooks"
 import storage from "~utils/storage"
+import { baseUrl } from "~config"
 
 
 
@@ -29,16 +30,23 @@ export const getShadowHostId = () => "bookmark-sidebar"
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [activeId, setActiveId] = useState(-1)
-  const { list } = bookmarkStore
+  const { list, curSessionId, initList } = bookmarkStore;
+  const curSessionlist = list.filter(bookmark => bookmark.sessionId === curSessionId)
+  console.log("render sidebar", { list, curSessionId, curSessionlist });
 
   useMount(() => {
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    console.log("init!!!");
+    initList();
+
+    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       if (request.message === 'urlChange') {
-        console.log('URL changed to ' + request.url);
+        const curSessionId = getSessionId();
+        console.log("urlChange event!", curSessionId);
+        bookmarkStore.curSessionId = curSessionId;
       }
     });
-    
-    bookmarkStore.initList()
+
+    // bookmarkStore.initList()
   })
 
   useEffect(() => {
@@ -94,7 +102,7 @@ const Sidebar = () => {
       <div style={styles.bookmarksArea}>
         <div style={styles.scrollArea}>
           {
-            list.map((bookmark, idx) =>
+            curSessionlist.map((bookmark, idx) =>
               <BookmarkItem
                 key={idx}
                 onClick={handleClickBookmark}
@@ -118,9 +126,17 @@ function getActiveId(list: Bookmark[]) {
   })?.bookmarkId ?? -1
 }
 
-function getConversationDomById(bookmarkId: number) {
-  return domIdMap.getDomById(bookmarkId)
+function getSessionLink() {
+  const url = window.location.href.split("#")[0];
+  return url
 }
+
+export function getSessionId() {
+  const link = getSessionLink();
+  const sessionId = link.replace(baseUrl, "");
+  return sessionId
+}
+
 
 const styles = createStyles({
   toggleBtn: {
@@ -145,6 +161,7 @@ const styles = createStyles({
   },
   scrollArea: {
     height: "90vh",
+    width: "100%",
     paddingBottom: "20%",
     overflow: "scroll"
   }
