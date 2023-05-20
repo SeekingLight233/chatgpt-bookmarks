@@ -4,6 +4,7 @@ import "./styles/base.css";
 import { createStyles } from '~utils/base';
 import { appStore, setShowEditBookmarkModal } from '~model/app';
 import { bookmarkStore, setTitle } from '~model/bookmark';
+import CrossIcon from '~components/Icons/CrossIcon';
 
 export const config: PlasmoCSConfig = {
   matches: ['https://chat.openai.com/*'],
@@ -35,7 +36,7 @@ const EditBookmarkModal = () => {
         <div style={styles.modalContent}>
           <div style={styles.header}>
             <span>Provide bookmark title</span>
-            <button onClick={() => setShowEditBookmarkModal(false)}>Cancel</button>
+            <CrossIcon onClick={() => setShowEditBookmarkModal(false)}></CrossIcon>
           </div>
           <textarea
             style={styles.textarea}

@@ -1,5 +1,5 @@
 import type { PlasmoCSConfig, PlasmoGetInlineAnchorList } from "plasmo"
-import BookmarkIcon from "~components/BookmarkIcon";
+import BookmarkIcon from "~components/Icons/BookmarkIcon";
 import { createStyles } from "~utils/base";
 import "./styles/base.css";
 import { useRef, useState } from "react";

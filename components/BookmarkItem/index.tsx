@@ -1,9 +1,9 @@
 
 import * as React from 'react';
-import { useMemo,useState } from 'react';
-import BookmarkIcon from '~components/BookmarkIcon';
-import DeleteIcon from '~components/DeleteIcon';
-import EditIcon from '~components/EditIcon';
+import { useMemo, useState } from 'react';
+import BookmarkIcon from '~components/Icons/BookmarkIcon';
+import DeleteIcon from '~components/Icons/DeleteIcon';
+import EditIcon from '~components/Icons/EditIcon';
 import type { Bookmark } from '~model/bookmark';
 import { createStyles } from '~utils/base';
 import { domIdMap } from '~utils/dom';
@@ -18,13 +18,16 @@ interface BookmarkItemProps extends Bookmark {
 }
 
 const BookmarkItem: React.FC<BookmarkItemProps> = (props) => {
-  const { onEdit, onDelete, onClick, title, sessionId, bookmarkId,active = false } = props;
+  const { onEdit, onDelete, onClick, title, sessionId, bookmarkId, active = false } = props;
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
+  const [deleteAlert, setDeleteAlert] = useState(false)
 
   const backgroundColor = useMemo(() => {
     if (active) return theme.activeColor;
     return isHovered ? theme.bookmarkHoverColor : ""
   }, [isHovered, active])
+
+
 
   return <div onClick={() => onClick(bookmarkId)} style={{ ...styles.item, backgroundColor }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
     <BookmarkIcon style={styles.icon} color={"#fff"}></BookmarkIcon>
@@ -59,7 +62,7 @@ const styles = createStyles({
     width: "65%",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
-    overflow:"hidden",
+    overflow: "hidden",
     display: "inline-block",
   },
 })
