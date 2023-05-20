@@ -1,11 +1,11 @@
 :root,
 #bookmark-sidebar:host {
-  --bookmark-sidebar-width: 280px;
+  /* --bookmark-sidebar-width: 280px; */
 }
 
 body.bookmark-sidebar-show,
 body.bookmark-sidebar-show * {
-  max-width: calc(100vw - var(--bookmark-sidebar-width));
+  /* max-width: calc(100vw - var(--bookmark-sidebar-width)); */
 }
 
 #bookmark-sidebar {

@@ -7,7 +7,7 @@ import ArrowIcon from "~components/Icons/ArrowIcon"
 import theme from "~utils/theme"
 import { bookmarkStore, type Bookmark } from "~model/bookmark"
 import BookmarkItem from "~components/BookmarkItem"
-import { domIdMap, getBottomToolsDoms, isPartiallyInViewport } from "~utils/dom"
+import { distanceFromRight, domIdMap, getBottomToolsDoms, isPartiallyInViewport } from "~utils/dom"
 import { useMount, useThrottleFn } from "ahooks"
 import storage from "~utils/storage"
 import { baseUrl } from "~config"
@@ -32,16 +32,13 @@ const Sidebar = () => {
   const [activeId, setActiveId] = useState(-1)
   const { list, curSessionId, initList } = bookmarkStore;
   const curSessionlist = list.filter(bookmark => bookmark.sessionId === curSessionId)
-  console.log("render sidebar", { list, curSessionId, curSessionlist });
 
   useMount(() => {
-    console.log("init!!!");
     initList();
 
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       if (request.message === 'urlChange') {
         const curSessionId = getSessionId();
-        console.log("urlChange event!", curSessionId);
         bookmarkStore.curSessionId = curSessionId;
       }
     });
@@ -66,14 +63,12 @@ const Sidebar = () => {
   const { run: runSetActiveId } = useThrottleFn(
     () => {
       const newActiveId = getActiveId(list);
-      // console.log("newActiveId===", newActiveId)
       setActiveId(newActiveId)
     },
     { wait: 200 },
   );
 
   const scrollDom = document.querySelectorAll('div[class*="react-scroll-to-bottom"]')[1];
-  // console.log("scrollDom===", scrollDom);
 
 
   useEffect(() => {
@@ -90,8 +85,13 @@ const Sidebar = () => {
     }
   }, [scrollDom])
 
+  const siderbarWidth = getSiderbarWidth() - 4
+
   return (
-    <div id="sidebar" className={isOpen ? "open" : "closed"}>
+    <div id="sidebar" style={{
+      left: isOpen ? -siderbarWidth : 0,
+      width: siderbarWidth
+    }} className={isOpen ? "open" : "closed"}>
       <div style={{ ...styles.toggleBtn, backgroundColor: isOpen ? theme.bgColor : theme.tintColor }} onClick={() => setIsOpen(!isOpen)}>
         <ArrowIcon
           direction={isOpen ? "right" : "left"}
@@ -137,6 +137,13 @@ export function getSessionId() {
   const link = getSessionLink();
   const sessionId = link.replace(baseUrl, "");
   return sessionId
+}
+
+function getSiderbarWidth() {
+  const firstConversationDom = getBottomToolsDoms()?.[0]?.parentElement;
+  const width = distanceFromRight(firstConversationDom);
+  if (width < 200) return 200
+  return width;
 }
 
 

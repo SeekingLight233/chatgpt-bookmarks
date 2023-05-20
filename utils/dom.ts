@@ -1,6 +1,4 @@
 
-export const getBottomToolsDoms = () => document.querySelectorAll('.flex.justify-between.lg\\:block');
-
 class DomIdMap {
   private domToId: WeakMap<Element, number>;
   private idToDom: Map<number, Element>;
@@ -27,8 +25,8 @@ class DomIdMap {
 export const domIdMap = new DomIdMap()
 
 
-export function isPartiallyInViewport(element:Element|null ) {
-  if(element === null) return false;
+export function isPartiallyInViewport(element: Element | null) {
+  if (element === null) return false;
 
   const rect = element.getBoundingClientRect();
   const windowHeight = window.innerHeight || document.documentElement.clientHeight;
@@ -41,3 +39,15 @@ export function isPartiallyInViewport(element:Element|null ) {
     rect.right > 0
   );
 }
+
+
+export const getBottomToolsDoms = () => document.querySelectorAll('.flex.justify-between.lg\\:block');
+
+export function distanceFromRight(domElement: Element) {
+  if(domElement == null) return 0
+  const rect = domElement.getBoundingClientRect();
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+  const distance = viewportWidth - rect.right;
+  return distance;
+}
+

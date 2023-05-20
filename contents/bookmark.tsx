@@ -73,7 +73,7 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
     const isAnswer = idx % 2 !== 0;
     if (lastBtn && isAnswer) {
       (lastBtn.parentElement as ElementWithbookmarkId).bookmarkId = idx;
-      // TODO: we need find a better way to get conversationDom
+      // TODO: find a better way to get conversationDom
       const conversationDom = lastBtn?.parentElement?.parentElement?.parentElement?.parentElement;
       // set conversationDom to Id at this time
       conversationDom && domIdMap.set(conversationDom, idx)
