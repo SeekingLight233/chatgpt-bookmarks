@@ -21,7 +21,8 @@ export const bookmarkStore = resso({
 
   initList: () => {
     storage.getAll().then((allBookmarkObj) => {
-      const initList = Object.values(allBookmarkObj);
+      const initList = Object.values(allBookmarkObj)
+      initList.sort((a, b) => a.bookmarkId - b.bookmarkId)
       console.log("initList===", initList, allBookmarkObj)
       bookmarkStore.list = initList;
       bookmarkStore.curSessionId = getSessionId();
@@ -38,12 +39,26 @@ export const bookmarkStore = resso({
     bookmarkStore.curTitle = title;
   },
 
+  onAdd: (bookmark: Bookmark) => {
+    // we need insert it to right position
+    const { bookmarkId, sessionId, title } = bookmark;
+    const oriList = [...bookmarkStore.list];
+
+    let index = oriList.findIndex(item => item.bookmarkId > bookmarkId);
+    if (index === -1) { // If no bookmarkId is greater, append to the end
+      index = oriList.length;
+    }
+    oriList.splice(index, 0, bookmark);
+
+    bookmarkStore.list = oriList;
+  },
+
   onSave: (bookmark: Bookmark) => {
     const { sessionId, bookmarkId } = bookmark
     const oriList = [...bookmarkStore.list];
     const targetIdx = oriList.findIndex((item) => item.bookmarkId === bookmarkId);
     if (targetIdx == -1) {
-      bookmarkStore.list.push(bookmark);
+      bookmarkStore.onAdd(bookmark)
     } else {
       oriList[targetIdx] = bookmark;
       bookmarkStore.list = oriList;
@@ -57,7 +72,7 @@ export const bookmarkStore = resso({
     setShowEditBookmarkModal(false);
   },
 
-  onDelete: (omitBookmark: Omit<Bookmark,"title">) => {
+  onDelete: (omitBookmark: Omit<Bookmark, "title">) => {
     const { sessionId, bookmarkId } = omitBookmark;
     const oriList = [...bookmarkStore.list];
     const targetIdx = oriList.findIndex((item) => item.bookmarkId === bookmarkId);
@@ -68,7 +83,7 @@ export const bookmarkStore = resso({
     const key = sessionId + "#" + bookmarkId;
     storage.remove(key).then(() => {
       console.log("remove success")
-    }); 
+    });
   },
 
   findBookMarkByBookmarkId: (bookmarkId: number): (Bookmark | undefined) => {
