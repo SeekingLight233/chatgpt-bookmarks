@@ -1,3 +1,4 @@
+import { useMemoizedFn } from "ahooks"
 import * as React from "react"
 import { createStyles } from "~utils/base"
 import { useHover } from "~utils/hooks/useHover"
@@ -8,8 +9,12 @@ interface EditIconProps extends React.SVGProps<SVGSVGElement> {
 }
 
 function EditIcon(props: EditIconProps) {
-  const { color = theme.iconTintColor, ...restProps } = props
+  const { color = theme.iconTintColor, onClick, ...restProps } = props
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
+  const handleClick = useMemoizedFn((e) => {
+    e.stopPropagation()
+    onClick(e)
+  })
 
   return (
     <div style={{ color: isHovered ? "#fff" : theme.iconTintColor, ...styles.container }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -24,6 +29,7 @@ function EditIcon(props: EditIconProps) {
         height="1em"
         width="1em"
         xmlns="http://www.w3.org/2000/svg"
+        onClick={handleClick}
         {...restProps}
       >
         <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
@@ -38,7 +44,7 @@ const styles = createStyles({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    cursor:"pointer"
+    cursor: "pointer"
   }
 })
 

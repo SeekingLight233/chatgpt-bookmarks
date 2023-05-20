@@ -14,18 +14,7 @@ export interface Bookmark {
 }
 
 export const bookmarkStore = resso({
-  list: [
-    // {
-    //   bookmarkId: 11,
-    //   sessionLink: "https://chat.openai.com/c/41be8183-ecd0-4b09-9606-9f70c871d918",
-    //   title: "计算书签的大小"
-    // },
-    // {
-    //   bookmarkId: 29,
-    //   sessionLink: "https://chat.openai.com/c/41be8183-ecd0-4b09-9606-9f70c871d918",
-    //   title: "关于chrome 存储api的基本使用"
-    // },
-  ] as Bookmark[],
+  list: [] as Bookmark[],
   curTitle: "",
   curSessionId: "",
   curBookmarkId: null,
@@ -41,20 +30,50 @@ export const bookmarkStore = resso({
     })
   },
 
-  onEdit: (bookmarkId: number) => {
+  onEdit: (bookmark: Bookmark) => {
+    const { bookmarkId, sessionId, title } = bookmark;
     setShowEditBookmarkModal(true);
     bookmarkStore.curBookmarkId = bookmarkId;
-    const sessionId = getSessionId();
     bookmarkStore.curSessionId = sessionId
+    bookmarkStore.curTitle = title;
   },
+
   onSave: (bookmark: Bookmark) => {
     const { sessionId, bookmarkId } = bookmark
+    const oriList = [...bookmarkStore.list];
+    const targetIdx = oriList.findIndex((item) => item.bookmarkId === bookmarkId);
+    if (targetIdx == -1) {
+      bookmarkStore.list.push(bookmark);
+    } else {
+      oriList[targetIdx] = bookmark;
+      bookmarkStore.list = oriList;
+    }
+
     console.log("onSave", bookmark)
-    bookmarkStore.list.push(bookmark);
     const key = sessionId + "#" + bookmarkId;
     storage.set(key, bookmark).then(() => {
       console.log("save success")
-    })
+    });
+    setShowEditBookmarkModal(false);
+  },
+
+  onDelete: (omitBookmark: Omit<Bookmark,"title">) => {
+    const { sessionId, bookmarkId } = omitBookmark;
+    const oriList = [...bookmarkStore.list];
+    const targetIdx = oriList.findIndex((item) => item.bookmarkId === bookmarkId);
+    if (targetIdx != -1) {
+      oriList.splice(targetIdx, 1);
+      bookmarkStore.list = oriList;
+    }
+    const key = sessionId + "#" + bookmarkId;
+    storage.remove(key).then(() => {
+      console.log("remove success")
+    }); 
+  },
+
+  findBookMarkByBookmarkId: (bookmarkId: number): (Bookmark | undefined) => {
+    const bookmark = bookmarkStore.list.find((bookmark) => bookmark.bookmarkId === bookmarkId);
+    return bookmark;
   }
 });
 

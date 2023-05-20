@@ -8,6 +8,8 @@ import { setShowEditBookmarkModal } from "~model/app";
 import { bookmarkStore } from "~model/bookmark";
 import { useHover } from "~utils/hooks/useHover";
 import { domIdMap, getBottomToolsDoms } from "~utils/dom";
+import { getSessionId } from "./sidebar";
+import { useMemoizedFn } from "ahooks";
 
 
 
@@ -15,14 +17,25 @@ const Bookmark = () => {
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
   const domRef = useRef<HTMLDivElement>(null)
 
+  const handleClick = useMemoizedFn(() => {
+    const curBookmarkDom = domRef.current;
+    const bookmarkId = getbookmarkIdByDom(curBookmarkDom);
+    if (bookmarkId == null) return new Error("can not find bookmarkId");
+    const curBookmark = bookmarkStore.findBookMarkByBookmarkId(bookmarkId)
+    if (curBookmark == null) {
+      bookmarkStore.onEdit({
+        bookmarkId,
+        title: "",
+        sessionId: getSessionId()
+      })
+    } else {
+      bookmarkStore.onEdit(curBookmark)
+    }
+  })
+
   return <div
     ref={domRef}
-    onClick={() => {
-      const curBookmarkDom = domRef.current;
-      const bookmarkId = getbookmarkIdByDom(curBookmarkDom);
-      if (bookmarkId == null) return new Error("can not find bookmarkId");
-      bookmarkStore.onEdit(bookmarkId)
-    }}
+    onClick={handleClick}
     onMouseEnter={handleMouseEnter}
     onMouseLeave={handleMouseLeave}
     style={{ ...styles.container, backgroundColor: isHovered ? theme.iconHoverColor : "#444654" }}>

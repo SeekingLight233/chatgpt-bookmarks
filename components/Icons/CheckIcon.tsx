@@ -1,12 +1,10 @@
 import * as React from "react"
-import { useMemo } from "react";
-import { useHover } from "~utils/hooks/useHover";
-import theme from "~utils/theme";
+import { useHover } from "~utils/hooks/useHover"
+import theme from "~utils/theme"
 
-function CheckIcon(props) {
+function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
 
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
-
   return (
     <svg
       onMouseEnter={handleMouseEnter}
@@ -18,7 +16,10 @@ function CheckIcon(props) {
       height={"1rem"}
       {...props}
     >
-      <path fill={isHovered ? "#fff" : theme.iconTintColor} d="M20 6L9 17 4 12" />
+      <path
+        d="M327.46 896L0 563.98l60.96-61.81 266.5 270.2L963.04 128l60.96 61.81z"
+        fill={isHovered ? "#fff" : theme.iconTintColor}
+      />
     </svg>
   )
 }

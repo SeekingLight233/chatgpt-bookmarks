@@ -106,9 +106,11 @@ const Sidebar = () => {
               <BookmarkItem
                 key={idx}
                 onClick={handleClickBookmark}
-                onEdit={() => { }}
+                onEdit={(bookmark) => {
+                  bookmarkStore.onEdit(bookmark)
+                }}
                 active={activeId === bookmark.bookmarkId}
-                onDelete={() => { }}
+                onDelete={bookmarkStore.onDelete}
                 {...bookmark}
               />)
           }

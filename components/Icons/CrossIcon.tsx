@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useHover } from "~utils/hooks/useHover";
 import theme from "~utils/theme";
 
-function CrossIcon(props) {
+function CrossIcon(props: React.SVGProps<SVGSVGElement>) {
 
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
 

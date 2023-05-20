@@ -9,10 +9,12 @@ import { createStyles } from '~utils/base';
 import { domIdMap } from '~utils/dom';
 import { useHover } from '~utils/hooks/useHover';
 import theme from '~utils/theme';
+import AlertIcons from './DeleteAlert';
+import { useMemoizedFn } from 'ahooks';
 
 interface BookmarkItemProps extends Bookmark {
   onEdit: (bookmark: Bookmark) => void;
-  onDelete: (bookmark: Bookmark) => void;
+  onDelete: (omitBookmark: Omit<Bookmark, "title">) => void;
   onClick: (bookmarkId: number) => void;
   active?: boolean;
 }
@@ -27,19 +29,49 @@ const BookmarkItem: React.FC<BookmarkItemProps> = (props) => {
     return isHovered ? theme.bookmarkHoverColor : ""
   }, [isHovered, active])
 
+  const handleConfirm = useMemoizedFn(() => {
+    onDelete({
+      sessionId,
+      bookmarkId,
+    })
+    setDeleteAlert(false)
+  });
+
+  const handleCancel = useMemoizedFn(() => {
+    setDeleteAlert(false)
+  });
+
+  const handleClickDelete = useMemoizedFn((e) => {
+    e.stopPropagation()
+    setDeleteAlert(true)
+  })
+
+  const handleClickEdit = useMemoizedFn((e) => {
+    e.stopPropagation();
+    onEdit({
+      sessionId,
+      bookmarkId,
+      title
+    })
+  })
 
 
-  return <div onClick={() => onClick(bookmarkId)} style={{ ...styles.item, backgroundColor }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+  return <div onClick={() => {
+    onClick(bookmarkId)
+  }} style={{ ...styles.item, backgroundColor }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
     <BookmarkIcon style={styles.icon} color={"#fff"}></BookmarkIcon>
     <span style={styles.title}>{title}</span>
-    <EditIcon style={styles.rightIcon}></EditIcon>
-    <DeleteIcon style={styles.rightIcon}></DeleteIcon>
+
+    {deleteAlert ? <AlertIcons onConfirm={handleConfirm} onCancel={handleCancel}></AlertIcons> : <>
+      <EditIcon onClick={handleClickEdit} style={styles.rightIcon}></EditIcon>
+      <DeleteIcon onClick={handleClickDelete} style={styles.rightIcon}></DeleteIcon>
+    </>}
   </div>
 }
 
 export default BookmarkItem;
 
-const styles = createStyles({
+export const styles = createStyles({
   item: {
     width: "90%",
     height: 44,
