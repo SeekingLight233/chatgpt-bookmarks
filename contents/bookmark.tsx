@@ -38,8 +38,8 @@ const Bookmark = () => {
     onClick={handleClick}
     onMouseEnter={handleMouseEnter}
     onMouseLeave={handleMouseLeave}
-    style={{ ...styles.container, backgroundColor: isHovered ? theme.iconHoverColor : "#444654" }}>
-    <BookmarkIcon color={isHovered ? "#fff" : theme.iconTintColor}></BookmarkIcon>
+    style={{ ...styles.container, backgroundColor: isHovered ? theme.iconHoverColor : theme.bookmarkBg }}>
+    <BookmarkIcon color={isHovered ? theme.bookmarkIconHoverColor : theme.iconTintColor}></BookmarkIcon>
   </div>
 }
 

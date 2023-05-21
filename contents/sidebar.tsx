@@ -90,7 +90,8 @@ const Sidebar = () => {
   return (
     <div id="sidebar" style={{
       left: isOpen ? -siderbarWidth : 0,
-      width: siderbarWidth
+      width: siderbarWidth,
+      backgroundColor: theme.tintColor
     }} className={isOpen ? "open" : "closed"}>
       <div style={{ ...styles.toggleBtn, backgroundColor: isOpen ? theme.bgColor : theme.tintColor }} onClick={() => setIsOpen(!isOpen)}>
         <ArrowIcon
