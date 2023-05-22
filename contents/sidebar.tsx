@@ -11,6 +11,7 @@ import { distanceFromRight, domIdMap, getBottomToolsDoms, isPartiallyInViewport 
 import { useMount, useThrottleFn } from "ahooks"
 import storage from "~utils/storage"
 import { baseUrl } from "~config"
+import Empty from "~components/Empty"
 
 
 
@@ -87,6 +88,21 @@ const Sidebar = () => {
 
   const siderbarWidth = getSiderbarWidth() - 4
 
+  const renderBookmarks = () => {
+    if (curSessionlist.length === 0) return <Empty></Empty>
+    return curSessionlist.map((bookmark, idx) =>
+      <BookmarkItem
+        key={idx}
+        onClick={handleClickBookmark}
+        onEdit={(bookmark) => {
+          bookmarkStore.onEdit(bookmark)
+        }}
+        active={activeId === bookmark.bookmarkId}
+        onDelete={bookmarkStore.onDelete}
+        {...bookmark}
+      />)
+  }
+
   return (
     <div id="sidebar" style={{
       left: isOpen ? -siderbarWidth : 0,
@@ -102,19 +118,7 @@ const Sidebar = () => {
       </div>
       <div style={styles.bookmarksArea}>
         <div style={styles.scrollArea}>
-          {
-            curSessionlist.map((bookmark, idx) =>
-              <BookmarkItem
-                key={idx}
-                onClick={handleClickBookmark}
-                onEdit={(bookmark) => {
-                  bookmarkStore.onEdit(bookmark)
-                }}
-                active={activeId === bookmark.bookmarkId}
-                onDelete={bookmarkStore.onDelete}
-                {...bookmark}
-              />)
-          }
+          {renderBookmarks()}
         </div>
 
       </div>
