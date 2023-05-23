@@ -12,6 +12,7 @@ import { useMount, useThrottleFn } from "ahooks"
 import storage from "~utils/storage"
 import { baseUrl } from "~config"
 import Empty from "~components/Empty"
+import TabBar, { type Tab } from "~components/TabBar"
 
 
 
@@ -28,11 +29,18 @@ export const getStyle = () => {
 
 export const getShadowHostId = () => "bookmark-sidebar"
 
+const tabs: Tab[] = [
+  { id: "current", title: "Current" },
+  { id: "all", title: "All" }
+]
+
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [activeId, setActiveId] = useState(-1)
+  const [curTab, setCurTab] = useState(tabs[0].id)
+
   const { list, curSessionId, initList } = bookmarkStore;
-  const curSessionlist = list.filter(bookmark => bookmark.sessionId === curSessionId)
+
 
   useMount(() => {
     initList();
@@ -89,8 +97,9 @@ const Sidebar = () => {
   const siderbarWidth = getSiderbarWidth() - 4
 
   const renderBookmarks = () => {
-    if (curSessionlist.length === 0) return <Empty></Empty>
-    return curSessionlist.map((bookmark, idx) =>
+    const renderList = curTab === "all" ? list : list.filter(bookmark => bookmark.sessionId === curSessionId)
+    if (renderList.length === 0) return <Empty></Empty>
+    return renderList.map((bookmark, idx) =>
       <BookmarkItem
         key={idx}
         onClick={handleClickBookmark}
@@ -114,8 +123,10 @@ const Sidebar = () => {
           direction={isOpen ? "right" : "left"}
           color={isOpen ? theme.tintColor : theme.bgColor}
         ></ArrowIcon>
-
       </div>
+
+      <TabBar tabs={tabs} activeId={curTab} onChange={setCurTab}></TabBar>
+
       <div style={styles.bookmarksArea}>
         <div style={styles.scrollArea}>
           {renderBookmarks()}
@@ -147,7 +158,7 @@ export function getSessionId() {
 function getSiderbarWidth() {
   const firstConversationDom = getBottomToolsDoms()?.[0]?.parentElement;
   const width = distanceFromRight(firstConversationDom);
-  if (width < 200) return 200
+  if (width < 280) return 280
   return width;
 }
 
