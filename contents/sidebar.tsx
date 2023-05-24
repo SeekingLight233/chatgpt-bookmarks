@@ -22,6 +22,7 @@ import {
 import storage from "~utils/storage"
 import theme from "~utils/theme"
 
+
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
 }
@@ -98,7 +99,7 @@ const Sidebar = () => {
 
     return () => {
       if (scrollDom) {
-        scrollDom.removeEventListener("scroll", () => {})
+        scrollDom.removeEventListener("scroll", () => { })
       }
     }
   }, [scrollDom])

@@ -29,7 +29,8 @@ const Bookmark = () => {
       bookmarkStore.onEdit({
         bookmarkId,
         title: "",
-        sessionId: getSessionId()
+        sessionId: getSessionId(),
+        createUnix: new Date().getTime()
       })
     } else {
       bookmarkStore.onEdit(curBookmark)

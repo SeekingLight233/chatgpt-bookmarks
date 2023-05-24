@@ -15,7 +15,7 @@ export const config: PlasmoCSConfig = {
 export const getShadowHostId = () => "edit-bookmark-modal"
 
 const EditBookmarkModal = () => {
-  const { curTitle, curSessionId, curBookmarkId, onSave } = bookmarkStore
+  const { curTitle, curSessionId, curBookmarkId, curCreateUnix: curCreateTime, onSave } = bookmarkStore
 
   const { showEditBookmarkModal } = appStore
 
@@ -27,7 +27,8 @@ const EditBookmarkModal = () => {
     onSave({
       title: curTitle,
       sessionId: curSessionId,
-      bookmarkId: curBookmarkId
+      bookmarkId: curBookmarkId,
+      createUnix: curCreateTime,
     })
   }
 

@@ -6,12 +6,13 @@ import { getSessionId } from "~contents/sidebar"
 import { filterKeysByString } from "~utils/base"
 import storage from "~utils/storage"
 
-import { setShowEditBookmarkModal } from "./app"
+import { setShowEditBookmarkModal, showToast } from "./app"
 
 export interface Bookmark {
   bookmarkId: number
   title: string
-  sessionId: string
+  sessionId: string,
+  createUnix: number
 }
 
 export const bookmarkStore = resso({
@@ -19,6 +20,7 @@ export const bookmarkStore = resso({
   curTitle: "",
   curSessionId: "",
   curBookmarkId: null,
+  curCreateUnix: new Date().getTime(),
 
   initList: () => {
     storage
@@ -36,11 +38,12 @@ export const bookmarkStore = resso({
   },
 
   onEdit: (bookmark: Bookmark) => {
-    const { bookmarkId, sessionId, title } = bookmark
+    const { bookmarkId, sessionId, title, createUnix: createTime } = bookmark
     setShowEditBookmarkModal(true)
     bookmarkStore.curBookmarkId = bookmarkId
     bookmarkStore.curSessionId = sessionId
     bookmarkStore.curTitle = title
+    bookmarkStore.curCreateUnix = createTime
   },
 
   onAdd: (bookmark: Bookmark) => {
@@ -75,6 +78,7 @@ export const bookmarkStore = resso({
     const key = sessionId + "#" + bookmarkId
     storage.set(key, bookmark).then(() => {
       console.log("save success")
+      showToast("save success")
     })
     setShowEditBookmarkModal(false)
   },
@@ -91,6 +95,7 @@ export const bookmarkStore = resso({
     }
     const key = sessionId + "#" + bookmarkId
     storage.remove(key).then(() => {
+      showToast("delete success")
       console.log("remove success")
     })
   },
