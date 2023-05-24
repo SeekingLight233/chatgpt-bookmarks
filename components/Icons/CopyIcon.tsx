@@ -1,5 +1,6 @@
 import { useMemoizedFn } from "ahooks"
 import * as React from "react"
+
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 
@@ -12,7 +13,6 @@ function CopyIcon(props: React.SVGProps<SVGSVGElement>) {
     e.stopPropagation()
     onClick(e)
   })
-
 
   return (
     <svg
@@ -30,8 +30,7 @@ function CopyIcon(props: React.SVGProps<SVGSVGElement>) {
       width="1em"
       xmlns="http://www.w3.org/2000/svg"
       onClick={handleClick}
-      color={isHovered ? "#fff" : theme.iconTintColor}
-    >
+      color={isHovered ? "#fff" : theme.iconTintColor}>
       <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" />
       <rect x={8} y={2} width={8} height={4} rx={1} ry={1} />
     </svg>

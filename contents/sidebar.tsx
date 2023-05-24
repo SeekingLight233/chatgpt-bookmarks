@@ -1,20 +1,26 @@
 import cssText from "data-text:~/contents/styles/sidebar.css"
 import type { PlasmoCSConfig } from "plasmo"
 import { useCallback, useEffect, useState } from "react"
+
 import "./styles/base.css"
-import { createStyles } from "~utils/base"
-import ArrowIcon from "~components/Icons/ArrowIcon"
-import theme from "~utils/theme"
-import { bookmarkStore, type Bookmark } from "~model/bookmark"
-import BookmarkItem from "~components/BookmarkItem"
-import { distanceFromRight, domIdMap, getBottomToolsDoms, isPartiallyInViewport } from "~utils/dom"
+
 import { useMount, useThrottleFn } from "ahooks"
-import storage from "~utils/storage"
-import { baseUrl } from "~config"
+
+import BookmarkItem from "~components/BookmarkItem"
 import Empty from "~components/Empty"
+import ArrowIcon from "~components/Icons/ArrowIcon"
 import TabBar, { type Tab } from "~components/TabBar"
-
-
+import { baseUrl } from "~config"
+import { type Bookmark, bookmarkStore } from "~model/bookmark"
+import { createStyles } from "~utils/base"
+import {
+  distanceFromRight,
+  domIdMap,
+  getBottomToolsDoms,
+  isPartiallyInViewport
+} from "~utils/dom"
+import storage from "~utils/storage"
+import theme from "~utils/theme"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
@@ -39,18 +45,21 @@ const Sidebar = () => {
   const [activeId, setActiveId] = useState(-1)
   const [curTab, setCurTab] = useState(tabs[0].id)
 
-  const { list, curSessionId, initList } = bookmarkStore;
-
+  const { list, curSessionId, initList } = bookmarkStore
 
   useMount(() => {
-    initList();
+    initList()
 
-    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-      if (request.message === 'urlChange') {
-        const curSessionId = getSessionId();
-        bookmarkStore.curSessionId = curSessionId;
+    chrome.runtime.onMessage.addListener(function (
+      request,
+      sender,
+      sendResponse
+    ) {
+      if (request.message === "urlChange") {
+        const curSessionId = getSessionId()
+        bookmarkStore.curSessionId = curSessionId
       }
-    });
+    })
 
     // bookmarkStore.initList()
   })
@@ -59,26 +68,26 @@ const Sidebar = () => {
     document.body.classList.toggle("bookmark-sidebar-show", isOpen)
   }, [isOpen])
 
-
   const handleClickBookmark = (bookmarkId) => {
     const conversationDom = domIdMap.getDomById(bookmarkId)
     if (conversationDom) {
-      conversationDom.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      conversationDom.scrollIntoView({ behavior: "smooth", block: "start" })
     } else {
-      console.error(`Element with id ${bookmarkId} not found.`);
+      console.error(`Element with id ${bookmarkId} not found.`)
     }
   }
 
   const { run: runSetActiveId } = useThrottleFn(
     () => {
-      const newActiveId = getActiveId(list);
+      const newActiveId = getActiveId(list)
       setActiveId(newActiveId)
     },
-    { wait: 200 },
-  );
+    { wait: 200 }
+  )
 
-  const scrollDom = document.querySelectorAll('div[class*="react-scroll-to-bottom"]')[1];
-
+  const scrollDom = document.querySelectorAll(
+    'div[class*="react-scroll-to-bottom"]'
+  )[1]
 
   useEffect(() => {
     if (scrollDom) {
@@ -89,7 +98,7 @@ const Sidebar = () => {
 
     return () => {
       if (scrollDom) {
-        scrollDom.removeEventListener("scroll", () => { })
+        scrollDom.removeEventListener("scroll", () => {})
       }
     }
   }, [scrollDom])
@@ -97,9 +106,12 @@ const Sidebar = () => {
   const siderbarWidth = getSiderbarWidth() - 4
 
   const renderBookmarks = () => {
-    const renderList = curTab === "all" ? list : list.filter(bookmark => bookmark.sessionId === curSessionId)
+    const renderList =
+      curTab === "all"
+        ? list
+        : list.filter((bookmark) => bookmark.sessionId === curSessionId)
     if (renderList.length === 0) return <Empty></Empty>
-    return renderList.map((bookmark, idx) =>
+    return renderList.map((bookmark, idx) => (
       <BookmarkItem
         key={idx}
         onClick={handleClickBookmark}
@@ -109,59 +121,65 @@ const Sidebar = () => {
         active={activeId === bookmark.bookmarkId}
         onDelete={bookmarkStore.onDelete}
         {...bookmark}
-      />)
+      />
+    ))
   }
 
   return (
-    <div id="sidebar" style={{
-      left: isOpen ? -siderbarWidth : 0,
-      width: siderbarWidth,
-      backgroundColor: theme.tintColor
-    }} className={isOpen ? "open" : "closed"}>
-      <div style={{ ...styles.toggleBtn, backgroundColor: isOpen ? theme.bgColor : theme.tintColor }} onClick={() => setIsOpen(!isOpen)}>
+    <div
+      id="sidebar"
+      style={{
+        left: isOpen ? -siderbarWidth : 0,
+        width: siderbarWidth,
+        backgroundColor: theme.tintColor
+      }}
+      className={isOpen ? "open" : "closed"}>
+      <div
+        style={{
+          ...styles.toggleBtn,
+          backgroundColor: isOpen ? theme.bgColor : theme.tintColor
+        }}
+        onClick={() => setIsOpen(!isOpen)}>
         <ArrowIcon
           direction={isOpen ? "right" : "left"}
-          color={isOpen ? theme.tintColor : theme.bgColor}
-        ></ArrowIcon>
+          color={isOpen ? theme.tintColor : theme.bgColor}></ArrowIcon>
       </div>
 
       <TabBar tabs={tabs} activeId={curTab} onChange={setCurTab}></TabBar>
 
       <div style={styles.bookmarksArea}>
-        <div style={styles.scrollArea}>
-          {renderBookmarks()}
-        </div>
-
+        <div style={styles.scrollArea}>{renderBookmarks()}</div>
       </div>
     </div>
   )
 }
 
 function getActiveId(list: Bookmark[]) {
-  return list.find((bookmark) => {
-    const conversationDom = domIdMap.getDomById(bookmark.bookmarkId);
-    return isPartiallyInViewport(conversationDom)
-  })?.bookmarkId ?? -1
+  return (
+    list.find((bookmark) => {
+      const conversationDom = domIdMap.getDomById(bookmark.bookmarkId)
+      return isPartiallyInViewport(conversationDom)
+    })?.bookmarkId ?? -1
+  )
 }
 
 function getSessionLink() {
-  const url = window.location.href.split("#")[0];
+  const url = window.location.href.split("#")[0]
   return url
 }
 
 export function getSessionId() {
-  const link = getSessionLink();
-  const sessionId = link.replace(baseUrl, "");
+  const link = getSessionLink()
+  const sessionId = link.replace(baseUrl, "")
   return sessionId
 }
 
 function getSiderbarWidth() {
-  const firstConversationDom = getBottomToolsDoms()?.[0]?.parentElement;
-  const width = distanceFromRight(firstConversationDom);
+  const firstConversationDom = getBottomToolsDoms()?.[0]?.parentElement
+  const width = distanceFromRight(firstConversationDom)
   if (width < 280) return 280
-  return width;
+  return width
 }
-
 
 const styles = createStyles({
   toggleBtn: {
@@ -182,7 +200,7 @@ const styles = createStyles({
     display: "flex",
     alignItems: "flex-start",
     flexDirection: "column",
-    paddingTop: 40,
+    paddingTop: 40
   },
   scrollArea: {
     height: "90vh",
@@ -193,4 +211,3 @@ const styles = createStyles({
 })
 
 export default Sidebar
-

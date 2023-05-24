@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 function IndexPopup() {
   const [data, setData] = useState("")
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("popup")
   })
 
@@ -14,7 +14,7 @@ function IndexPopup() {
         flexDirection: "column",
         padding: 16
       }}>
-        <h2>chatgpt bookmarks is actived!111</h2>
+      <h2>chatgpt bookmarks is actived!111</h2>
     </div>
   )
 }

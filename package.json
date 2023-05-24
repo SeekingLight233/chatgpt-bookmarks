@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "package": "plasmo package"
+    "package": "plasmo package",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "ahooks": "^3.7.7",
@@ -22,7 +23,7 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.32",
     "@types/react-dom": "18.0.11",
-    "prettier": "2.8.7",
+    "prettier": "^2.8.8",
     "typescript": "5.0.3"
   },
   "manifest": {

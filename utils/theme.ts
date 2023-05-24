@@ -1,4 +1,3 @@
-
 const lightTheme = {
   tintColor: "#ffffff", // 白色主题背景
   bgColor: "#f0f0f0", // 一种很浅的灰色作为背景色
@@ -8,7 +7,7 @@ const lightTheme = {
   bookmarkHoverColor: "#e0e0e0", // 一种较深的灰色表示书签悬停
   white: "#202123", // 在明亮主题中，"white"实际上可以代表一种深色
   bookmarkBg: "#F7F7F8",
-  bookmarkIconHoverColor:"#40414F"
+  bookmarkIconHoverColor: "#40414F"
 }
 
 const darkTheme = {
@@ -32,11 +31,14 @@ const theme = getTheme()
 export default theme
 
 function isDarkMode() {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
     // 用户偏好是暗夜模式
-    return true;
+    return true
   } else {
     // 用户偏好不是暗夜模式
-    return false;
+    return false
   }
 }

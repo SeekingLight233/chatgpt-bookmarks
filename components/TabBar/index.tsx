@@ -1,6 +1,7 @@
-import * as React from 'react';
-import { createStyles } from '~utils/base';
-import theme from '~utils/theme';
+import * as React from "react"
+
+import { createStyles } from "~utils/base"
+import theme from "~utils/theme"
 
 export interface Tab {
   id: string
@@ -8,26 +9,32 @@ export interface Tab {
 }
 
 interface TabBarProps {
-  tabs: Tab[],
-  activeId: string,
+  tabs: Tab[]
+  activeId: string
   onChange: (tab: string) => void
 }
 
 const TabBar: React.FC<TabBarProps> = (props) => {
-
   const { tabs, activeId, onChange } = props
 
-  return <div style={styles.container}>
-    {tabs.map(({ id, title }) => {
-      const isActive = activeId === id
-      return <div
-        onClick={() => onChange(id)}
-        key={id}
-        style={{ ...styles.tab, backgroundColor: isActive ? theme.bookmarkHoverColor : "" }}>
-        {title}
-      </div>
-    })}
-  </div>
+  return (
+    <div style={styles.container}>
+      {tabs.map(({ id, title }) => {
+        const isActive = activeId === id
+        return (
+          <div
+            onClick={() => onChange(id)}
+            key={id}
+            style={{
+              ...styles.tab,
+              backgroundColor: isActive ? theme.bookmarkHoverColor : ""
+            }}>
+            {title}
+          </div>
+        )
+      })}
+    </div>
+  )
 }
 
 const styles = createStyles({
@@ -39,7 +46,7 @@ const styles = createStyles({
     display: "flex",
     flexDirection: "row",
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: "center"
   },
   tab: {
     width: "100%",
@@ -47,7 +54,7 @@ const styles = createStyles({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 8
   }
 })
 

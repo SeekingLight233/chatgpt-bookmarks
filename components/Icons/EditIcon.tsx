@@ -1,5 +1,6 @@
 import { useMemoizedFn } from "ahooks"
 import * as React from "react"
+
 import { createStyles } from "~utils/base"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
@@ -17,7 +18,13 @@ function EditIcon(props: EditIconProps) {
   })
 
   return (
-    <div style={{ color: isHovered ? "#fff" : theme.iconTintColor, ...styles.container }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div
+      style={{
+        color: isHovered ? "#fff" : theme.iconTintColor,
+        ...styles.container
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}>
       <svg
         stroke="currentColor"
         fill="none"
@@ -30,12 +37,10 @@ function EditIcon(props: EditIconProps) {
         width="1em"
         xmlns="http://www.w3.org/2000/svg"
         onClick={handleClick}
-        {...restProps}
-      >
+        {...restProps}>
         <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
       </svg>
     </div>
-
   )
 }
 
