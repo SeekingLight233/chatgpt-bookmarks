@@ -8,13 +8,13 @@ import "./styles/base.css"
 import { useMemoizedFn } from "ahooks"
 import { useRef, useState } from "react"
 
-import { setShowEditBookmarkModal } from "~model/app"
+import { appStore, setShowEditBookmarkModal } from "~model/app"
 import { bookmarkStore } from "~model/bookmark"
 import { domIdMap, getBottomToolsDoms } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 
-import { getSessionId } from "./sidebar"
+import { getBookmarkFromLink, getSessionId, scrollIntoBookmark } from "./sidebar"
 
 const Bookmark = () => {
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
@@ -82,13 +82,24 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
     const lastBtn = element.querySelector("div:first-child button:last-child")
     const isAnswer = idx % 2 !== 0
     if (lastBtn && isAnswer) {
-      ;(lastBtn.parentElement as ElementWithbookmarkId).bookmarkId = idx
+      ; (lastBtn.parentElement as ElementWithbookmarkId).bookmarkId = idx
       // TODO: find a better way to get conversationDom
       const conversationDom =
         lastBtn?.parentElement?.parentElement?.parentElement?.parentElement
       // set conversationDom to Id at this time
       conversationDom && domIdMap.set(conversationDom, idx)
       nodeList.push(lastBtn)
+    }
+
+    if (idx > 0 && idx === btmToolsDoms.length - 1) {
+      const linkBookmark = getBookmarkFromLink();
+      if (appStore.init === false) {
+        setTimeout(() => {
+          console.log("滚动！");
+          scrollIntoBookmark(+linkBookmark)
+        }, 1);
+        appStore.init = true
+      }
     }
   })
 

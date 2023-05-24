@@ -69,14 +69,6 @@ const Sidebar = () => {
     document.body.classList.toggle("bookmark-sidebar-show", isOpen)
   }, [isOpen])
 
-  const handleClickBookmark = (bookmarkId) => {
-    const conversationDom = domIdMap.getDomById(bookmarkId)
-    if (conversationDom) {
-      conversationDom.scrollIntoView({ behavior: "smooth", block: "start" })
-    } else {
-      console.error(`Element with id ${bookmarkId} not found.`)
-    }
-  }
 
   const { run: runSetActiveId } = useThrottleFn(
     () => {
@@ -115,7 +107,7 @@ const Sidebar = () => {
     return renderList.map((bookmark, idx) => (
       <BookmarkItem
         key={idx}
-        onClick={handleClickBookmark}
+        onClick={scrollIntoBookmark}
         onEdit={(bookmark) => {
           bookmarkStore.onEdit(bookmark)
         }}
@@ -165,7 +157,12 @@ function getActiveId(list: Bookmark[]) {
 }
 
 function getSessionLink() {
-  const url = window.location.href.split("#")[0]
+  const url = window.location.href.split("#")?.[0]
+  return url
+}
+
+export function getBookmarkFromLink() {
+  const url = window.location.href.split("#")?.[1]
   return url
 }
 
@@ -180,6 +177,16 @@ function getSiderbarWidth() {
   const width = distanceFromRight(firstConversationDom)
   if (width < 280) return 280
   return width
+}
+
+export const scrollIntoBookmark = (bookmarkId: number) => {
+  const conversationDom = domIdMap.getDomById(bookmarkId)
+  if (conversationDom) {
+    console.log("targetdom", conversationDom);
+    conversationDom.scrollIntoView({ behavior: "smooth", block: "start" })
+  } else {
+    console.error(`Element with id ${bookmarkId} not found.`)
+  }
 }
 
 const styles = createStyles({
