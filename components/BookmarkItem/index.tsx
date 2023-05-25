@@ -18,7 +18,7 @@ import AlertIcons from "./DeleteAlert"
 
 interface BookmarkItemProps extends Bookmark {
   onEdit: (bookmark: Bookmark) => void
-  onDelete: (omitBookmark: Omit<Bookmark, "title"|"createUnix">) => void
+  onDelete: (omitBookmark: Omit<Bookmark, "title" | "createUnix">) => void
   onClick: (bookmarkId: number) => void
   active?: boolean
 }
@@ -46,7 +46,7 @@ const BookmarkItem: React.FC<BookmarkItemProps> = (props) => {
   const handleConfirm = useMemoizedFn(() => {
     onDelete({
       sessionId,
-      bookmarkId,
+      bookmarkId
     })
     setDeleteAlert(false)
   })

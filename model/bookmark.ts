@@ -11,7 +11,7 @@ import { setShowEditBookmarkModal, showToast } from "./app"
 export interface Bookmark {
   bookmarkId: number
   title: string
-  sessionId: string,
+  sessionId: string
   createUnix: number
 }
 

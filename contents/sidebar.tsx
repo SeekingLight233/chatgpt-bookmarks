@@ -22,7 +22,6 @@ import {
 import storage from "~utils/storage"
 import theme from "~utils/theme"
 
-
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
 }
@@ -69,7 +68,6 @@ const Sidebar = () => {
     document.body.classList.toggle("bookmark-sidebar-show", isOpen)
   }, [isOpen])
 
-
   const { run: runSetActiveId } = useThrottleFn(
     () => {
       const newActiveId = getActiveId(list)
@@ -91,7 +89,7 @@ const Sidebar = () => {
 
     return () => {
       if (scrollDom) {
-        scrollDom.removeEventListener("scroll", () => { })
+        scrollDom.removeEventListener("scroll", () => {})
       }
     }
   }, [scrollDom])
@@ -182,7 +180,7 @@ function getSiderbarWidth() {
 export const scrollIntoBookmark = (bookmarkId: number) => {
   const conversationDom = domIdMap.getDomById(bookmarkId)
   if (conversationDom) {
-    console.log("targetdom", conversationDom);
+    console.log("targetdom", conversationDom)
     conversationDom.scrollIntoView({ behavior: "smooth", block: "start" })
   } else {
     console.error(`Element with id ${bookmarkId} not found.`)

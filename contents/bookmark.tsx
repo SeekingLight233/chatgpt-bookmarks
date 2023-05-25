@@ -14,7 +14,11 @@ import { domIdMap, getBottomToolsDoms } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 
-import { getBookmarkFromLink, getSessionId, scrollIntoBookmark } from "./sidebar"
+import {
+  getBookmarkFromLink,
+  getSessionId,
+  scrollIntoBookmark
+} from "./sidebar"
 
 const Bookmark = () => {
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
@@ -82,7 +86,7 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
     const lastBtn = element.querySelector("div:first-child button:last-child")
     const isAnswer = idx % 2 !== 0
     if (lastBtn && isAnswer) {
-      ; (lastBtn.parentElement as ElementWithbookmarkId).bookmarkId = idx
+      ;(lastBtn.parentElement as ElementWithbookmarkId).bookmarkId = idx
       // TODO: find a better way to get conversationDom
       const conversationDom =
         lastBtn?.parentElement?.parentElement?.parentElement?.parentElement
@@ -92,12 +96,12 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
     }
 
     if (idx > 0 && idx === btmToolsDoms.length - 1) {
-      const linkBookmark = getBookmarkFromLink();
+      const linkBookmark = getBookmarkFromLink()
       if (appStore.init === false) {
         setTimeout(() => {
-          console.log("滚动！");
+          console.log("滚动！")
           scrollIntoBookmark(+linkBookmark)
-        }, 1);
+        }, 1)
         appStore.init = true
       }
     }
