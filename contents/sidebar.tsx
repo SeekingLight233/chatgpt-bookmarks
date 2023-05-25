@@ -89,7 +89,7 @@ const Sidebar = () => {
 
     return () => {
       if (scrollDom) {
-        scrollDom.removeEventListener("scroll", () => {})
+        scrollDom.removeEventListener("scroll", () => { })
       }
     }
   }, [scrollDom])
@@ -119,6 +119,7 @@ const Sidebar = () => {
   return (
     <div
       id="sidebar"
+      onMouseLeave={()=>setIsOpen(false)}
       style={{
         left: isOpen ? -siderbarWidth : 0,
         width: siderbarWidth,
@@ -130,7 +131,8 @@ const Sidebar = () => {
           ...styles.toggleBtn,
           backgroundColor: isOpen ? theme.bgColor : theme.tintColor
         }}
-        onClick={() => setIsOpen(!isOpen)}>
+        onMouseEnter={() => setIsOpen(true)}
+      >
         <ArrowIcon
           direction={isOpen ? "right" : "left"}
           color={isOpen ? theme.tintColor : theme.bgColor}></ArrowIcon>
