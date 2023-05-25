@@ -16,7 +16,7 @@ export interface Bookmark {
 }
 
 export const bookmarkStore = resso({
-  list: [] as Bookmark[],
+  allBookmarks: [] as Bookmark[],
   curTitle: "",
   curSessionId: "",
   curBookmarkId: null,
@@ -29,7 +29,7 @@ export const bookmarkStore = resso({
         const initList = Object.values(allBookmarkObj)
         initList.sort((a, b) => a.bookmarkId - b.bookmarkId)
         console.log("initList===", initList, allBookmarkObj)
-        bookmarkStore.list = initList
+        bookmarkStore.allBookmarks = initList
         bookmarkStore.curSessionId = getSessionId()
       })
       .catch((err) => {
@@ -49,7 +49,7 @@ export const bookmarkStore = resso({
   onAdd: (bookmark: Bookmark) => {
     // we need insert it to right position
     const { bookmarkId, sessionId, title } = bookmark
-    const oriList = [...bookmarkStore.list]
+    const oriList = [...bookmarkStore.allBookmarks]
 
     let index = oriList.findIndex((item) => item.bookmarkId > bookmarkId)
     if (index === -1) {
@@ -58,12 +58,12 @@ export const bookmarkStore = resso({
     }
     oriList.splice(index, 0, bookmark)
 
-    bookmarkStore.list = oriList
+    bookmarkStore.allBookmarks = oriList
   },
 
   onSave: (bookmark: Bookmark) => {
     const { sessionId, bookmarkId } = bookmark
-    const oriList = [...bookmarkStore.list]
+    const oriList = [...bookmarkStore.allBookmarks]
     const targetIdx = oriList.findIndex(
       (item) => item.bookmarkId === bookmarkId
     )
@@ -71,7 +71,7 @@ export const bookmarkStore = resso({
       bookmarkStore.onAdd(bookmark)
     } else {
       oriList[targetIdx] = bookmark
-      bookmarkStore.list = oriList
+      bookmarkStore.allBookmarks = oriList
     }
 
     console.log("onSave", bookmark)
@@ -85,13 +85,13 @@ export const bookmarkStore = resso({
 
   onDelete: (omitBookmark: Omit<Bookmark, "title">) => {
     const { sessionId, bookmarkId } = omitBookmark
-    const oriList = [...bookmarkStore.list]
+    const oriList = [...bookmarkStore.allBookmarks]
     const targetIdx = oriList.findIndex(
       (item) => item.bookmarkId === bookmarkId
     )
     if (targetIdx != -1) {
       oriList.splice(targetIdx, 1)
-      bookmarkStore.list = oriList
+      bookmarkStore.allBookmarks = oriList
     }
     const key = sessionId + "#" + bookmarkId
     storage.remove(key).then(() => {
@@ -101,7 +101,7 @@ export const bookmarkStore = resso({
   },
 
   findBookMarkByBookmarkId: (bookmarkId: number): Bookmark | undefined => {
-    const bookmark = bookmarkStore.list.find(
+    const bookmark = bookmarkStore.allBookmarks.find(
       (bookmark) => bookmark.bookmarkId === bookmarkId
     )
     return bookmark

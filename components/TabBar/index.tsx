@@ -42,7 +42,7 @@ const styles = createStyles({
     width: "90%",
     height: 44,
     border: `1px solid #343542`,
-    marginTop: 100,
+    marginTop: 26,
     display: "flex",
     flexDirection: "row",
     borderRadius: 8,

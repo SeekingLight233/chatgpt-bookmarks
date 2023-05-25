@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 
 import "./styles/base.css"
 
-import { useMount, useThrottleFn } from "ahooks"
+import { useMemoizedFn, useMount, useThrottleFn } from "ahooks"
 
 import BookmarkItem from "~components/BookmarkItem"
 import Empty from "~components/Empty"
@@ -12,7 +12,7 @@ import ArrowIcon from "~components/Icons/ArrowIcon"
 import TabBar, { type Tab } from "~components/TabBar"
 import { baseUrl } from "~config"
 import { type Bookmark, bookmarkStore } from "~model/bookmark"
-import { createStyles } from "~utils/base"
+import { createStyles, pipe } from "~utils/base"
 import {
   distanceFromRight,
   domIdMap,
@@ -21,6 +21,7 @@ import {
 } from "~utils/dom"
 import storage from "~utils/storage"
 import theme from "~utils/theme"
+import SearchBar from "~components/SearchBar"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
@@ -44,8 +45,9 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [activeId, setActiveId] = useState(-1)
   const [curTab, setCurTab] = useState(tabs[0].id)
+  const [searchValue, setSearchValue] = useState("")
 
-  const { list, curSessionId, initList } = bookmarkStore
+  const { allBookmarks, curSessionId, initList } = bookmarkStore
 
   useMount(() => {
     initList()
@@ -74,7 +76,7 @@ const Sidebar = () => {
 
   const { run: runSetActiveId } = useThrottleFn(
     () => {
-      const newActiveId = getActiveId(list)
+      const newActiveId = getActiveId(allBookmarks)
       setActiveId(newActiveId)
     },
     { wait: 200 }
@@ -98,15 +100,23 @@ const Sidebar = () => {
     }
   }, [scrollDom])
 
-  const siderbarWidth = getSiderbarWidth() - 4
+
+
+  const filterByCurSessionId = useMemoizedFn((list: Bookmark[]) => {
+    return list.filter((bookmark) => bookmark.sessionId === curSessionId)
+  })
+
+  const filterBySearchValue = useMemoizedFn((list: Bookmark[]) => {
+    return list.filter((bookmark) => bookmark.title.includes(searchValue))
+  })
+
 
   const renderBookmarks = () => {
-    const renderList =
-      curTab === "all"
-        ? list
-        : list.filter((bookmark) => bookmark.sessionId === curSessionId)
-    if (renderList.length === 0) return <Empty></Empty>
-    return renderList.map((bookmark, idx) => (
+    const list = curTab === "all" ? allBookmarks : filterByCurSessionId(allBookmarks)
+    const filteredList = filterBySearchValue(list)
+    
+    if (filteredList.length === 0) return <Empty></Empty>
+    return filteredList.map((bookmark, idx) => (
       <BookmarkItem
         key={idx}
         onClick={scrollIntoBookmark}
@@ -120,10 +130,12 @@ const Sidebar = () => {
     ))
   }
 
+  const siderbarWidth = getSiderbarWidth() - 4
+
   return (
     <div
       id="sidebar"
-      onMouseLeave={() => setIsOpen(false)}
+      // onMouseLeave={() => setIsOpen(false)}
       style={{
         left: isOpen ? -siderbarWidth : 0,
         width: siderbarWidth,
@@ -135,12 +147,15 @@ const Sidebar = () => {
           ...styles.toggleBtn,
           backgroundColor: isOpen ? theme.bgColor : theme.tintColor
         }}
+        onClick={() => setIsOpen(!isOpen)}
         onMouseEnter={() => setIsOpen(true)}
       >
         <ArrowIcon
           direction={isOpen ? "right" : "left"}
           color={isOpen ? theme.tintColor : theme.bgColor}></ArrowIcon>
       </div>
+
+      <SearchBar onSearch={setSearchValue}></SearchBar>
 
       <TabBar tabs={tabs} activeId={curTab} onChange={setCurTab}></TabBar>
 
@@ -213,11 +228,10 @@ const styles = createStyles({
   },
   bookmarksArea: {
     width: "100%",
-    // height: 600,
     display: "flex",
     alignItems: "flex-start",
     flexDirection: "column",
-    paddingTop: 40
+    paddingTop: 26
   },
   scrollArea: {
     height: "90vh",
