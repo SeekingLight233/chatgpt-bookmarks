@@ -23,13 +23,13 @@ export function filterKeysByString<Value = any>(
   return result
 }
 
-type Func<T = any, R = T> = (arg: T) => R;
+type Func<T = any, R = T> = (arg: T) => R
 
 export function pipe<T = any, R = T>(...functions: Func<T, R>[]): Func<T, R> {
   return function (initialValue: T): R {
     // @ts-ignore
     return functions.reduce((accumulator: T, func: Func<T, R>) => {
-      return func(accumulator);
-    }, initialValue);
-  };
+      return func(accumulator)
+    }, initialValue)
+  }
 }

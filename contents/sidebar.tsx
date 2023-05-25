@@ -9,6 +9,7 @@ import { useMemoizedFn, useMount, useThrottleFn } from "ahooks"
 import BookmarkItem from "~components/BookmarkItem"
 import Empty from "~components/Empty"
 import ArrowIcon from "~components/Icons/ArrowIcon"
+import SearchBar from "~components/SearchBar"
 import TabBar, { type Tab } from "~components/TabBar"
 import { baseUrl } from "~config"
 import { type Bookmark, bookmarkStore } from "~model/bookmark"
@@ -21,7 +22,6 @@ import {
 } from "~utils/dom"
 import storage from "~utils/storage"
 import theme from "~utils/theme"
-import SearchBar from "~components/SearchBar"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
@@ -95,12 +95,10 @@ const Sidebar = () => {
 
     return () => {
       if (scrollDom) {
-        scrollDom.removeEventListener("scroll", () => { })
+        scrollDom.removeEventListener("scroll", () => {})
       }
     }
   }, [scrollDom])
-
-
 
   const filterByCurSessionId = useMemoizedFn((list: Bookmark[]) => {
     return list.filter((bookmark) => bookmark.sessionId === curSessionId)
@@ -110,11 +108,11 @@ const Sidebar = () => {
     return list.filter((bookmark) => bookmark.title.includes(searchValue))
   })
 
-
   const renderBookmarks = () => {
-    const list = curTab === "all" ? allBookmarks : filterByCurSessionId(allBookmarks)
+    const list =
+      curTab === "all" ? allBookmarks : filterByCurSessionId(allBookmarks)
     const filteredList = filterBySearchValue(list)
-    
+
     if (filteredList.length === 0) return <Empty></Empty>
     return filteredList.map((bookmark, idx) => (
       <BookmarkItem
@@ -148,8 +146,7 @@ const Sidebar = () => {
           backgroundColor: isOpen ? theme.bgColor : theme.tintColor
         }}
         onClick={() => setIsOpen(!isOpen)}
-        onMouseEnter={() => setIsOpen(true)}
-      >
+        onMouseEnter={() => setIsOpen(true)}>
         <ArrowIcon
           direction={isOpen ? "right" : "left"}
           color={isOpen ? theme.tintColor : theme.bgColor}></ArrowIcon>
@@ -208,9 +205,9 @@ export const scrollIntoBookmark = (bookmarkId: number) => {
 }
 
 function setActiveIdOnUrl(activeId: number) {
-  const url = window.location.href.split("#");
-  url[1] = activeId === -1 ? "" : activeId.toString();
-  history.replaceState(null, null, url.join("#"));
+  const url = window.location.href.split("#")
+  url[1] = activeId === -1 ? "" : activeId.toString()
+  history.replaceState(null, null, url.join("#"))
 }
 
 const styles = createStyles({
