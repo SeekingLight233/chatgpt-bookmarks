@@ -68,6 +68,10 @@ const Sidebar = () => {
     document.body.classList.toggle("bookmark-sidebar-show", isOpen)
   }, [isOpen])
 
+  useEffect(() => {
+    setActiveIdOnUrl(activeId)
+  }, [activeId])
+
   const { run: runSetActiveId } = useThrottleFn(
     () => {
       const newActiveId = getActiveId(list)
@@ -119,7 +123,7 @@ const Sidebar = () => {
   return (
     <div
       id="sidebar"
-      onMouseLeave={()=>setIsOpen(false)}
+      onMouseLeave={() => setIsOpen(false)}
       style={{
         left: isOpen ? -siderbarWidth : 0,
         width: siderbarWidth,
@@ -182,11 +186,16 @@ function getSiderbarWidth() {
 export const scrollIntoBookmark = (bookmarkId: number) => {
   const conversationDom = domIdMap.getDomById(bookmarkId)
   if (conversationDom) {
-    console.log("targetdom", conversationDom)
     conversationDom.scrollIntoView({ behavior: "smooth", block: "start" })
   } else {
     console.error(`Element with id ${bookmarkId} not found.`)
   }
+}
+
+function setActiveIdOnUrl(activeId: number) {
+  const url = window.location.href.split("#");
+  url[1] = activeId === -1 ? "" : activeId.toString();
+  history.replaceState(null, null, url.join("#"));
 }
 
 const styles = createStyles({
