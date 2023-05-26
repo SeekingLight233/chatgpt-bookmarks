@@ -70,9 +70,6 @@ const Sidebar = () => {
     document.body.classList.toggle("bookmark-sidebar-show", isOpen)
   }, [isOpen])
 
-  useEffect(() => {
-    setActiveIdOnUrl(activeId)
-  }, [activeId])
 
   const { run: runSetActiveId } = useThrottleFn(
     () => {
@@ -197,6 +194,7 @@ function getSiderbarWidth() {
 }
 
 export const scrollIntoBookmark = (bookmarkId: number) => {
+  setActiveIdOnUrl(bookmarkId)
   const conversationDom = domIdMap.getDomById(bookmarkId)
   if (conversationDom) {
     conversationDom.scrollIntoView({ behavior: "smooth", block: "start" })
