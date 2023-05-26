@@ -168,24 +168,26 @@ const Sidebar = () => {
   return (
     <div
       id="sidebar"
-      // onMouseLeave={() => setIsOpen(false)}
+      onMouseLeave={() => setIsOpen(false)}
       style={{
         left: isOpen ? -siderbarWidth : 0,
         width: siderbarWidth,
         backgroundColor: theme.tintColor
       }}
       className={isOpen ? "open" : "closed"}>
-      <div
-        style={{
-          ...styles.toggleBtn,
-          backgroundColor: isOpen ? theme.bgColor : theme.tintColor
-        }}
-        onClick={() => setIsOpen(!isOpen)}
-        onMouseEnter={() => setIsOpen(true)}>
-        <ArrowIcon
-          direction={isOpen ? "right" : "left"}
-          color={isOpen ? theme.tintColor : theme.bgColor}></ArrowIcon>
-      </div>
+      {!isOpen && (
+        <div
+          style={{
+            ...styles.toggleBtn,
+            backgroundColor: isOpen ? theme.bgColor : theme.tintColor
+          }}
+          // onClick={() => setIsOpen(!isOpen)}
+          onMouseEnter={() => setIsOpen(true)}>
+          <ArrowIcon
+            direction={isOpen ? "right" : "left"}
+            color={isOpen ? theme.tintColor : theme.bgColor}></ArrowIcon>
+        </div>
+      )}
 
       <SearchBar onSearch={setSearchValue}></SearchBar>
 
