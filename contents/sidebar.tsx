@@ -114,7 +114,7 @@ const Sidebar = () => {
           {data.map((bookmark, idx) => (
             <BookmarkItem
               key={idx}
-              onClick={scrollIntoBookmark}
+              onClick={handleClickBookmark}
               onEdit={(bookmark) => {
                 bookmarkStore.onEdit(bookmark)
               }}
@@ -128,12 +128,23 @@ const Sidebar = () => {
     })
   }
 
+  const handleClickBookmark = useMemoizedFn((bookmark: Bookmark) => {
+    const { sessionId, bookmarkId } = bookmark
+    const curSessionId = getSessionId()
+    if (sessionId === curSessionId) {
+      scrollIntoBookmark(bookmarkId)
+    } else {
+      const newLink = `${baseUrl}${sessionId}#${bookmarkId}`
+      window.open(newLink, "_self")
+    }
+  })
+
   const renderCurrentBookmarks = (list: Bookmark[]) => {
     const currentBookmark = filterByCurSessionId(list)
     return currentBookmark.map((bookmark, idx) => (
       <BookmarkItem
         key={idx}
-        onClick={scrollIntoBookmark}
+        onClick={handleClickBookmark}
         onEdit={(bookmark) => {
           bookmarkStore.onEdit(bookmark)
         }}
