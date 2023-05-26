@@ -95,7 +95,7 @@ const Sidebar = () => {
 
     return () => {
       if (scrollDom) {
-        scrollDom.removeEventListener("scroll", () => {})
+        scrollDom.removeEventListener("scroll", () => { })
       }
     }
   }, [scrollDom])
@@ -192,6 +192,7 @@ function getSiderbarWidth() {
   const firstConversationDom = getBottomToolsDoms()?.[0]?.parentElement
   const width = distanceFromRight(firstConversationDom)
   if (width < 280) return 280
+  if (width > 350) return 350
   return width
 }
 
