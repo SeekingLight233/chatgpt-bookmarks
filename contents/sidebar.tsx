@@ -129,7 +129,8 @@ const Sidebar = () => {
   }
 
   const renderCurrentBookmarks = (list: Bookmark[]) => {
-    return list.map((bookmark, idx) => (
+    const currentBookmark = filterByCurSessionId(list)
+    return currentBookmark.map((bookmark, idx) => (
       <BookmarkItem
         key={idx}
         onClick={scrollIntoBookmark}
