@@ -8,7 +8,8 @@
     "dev": "plasmo dev",
     "build": "plasmo build",
     "package": "plasmo package",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "jest"
   },
   "dependencies": {
     "ahooks": "^3.7.7",
@@ -18,14 +19,22 @@
     "resso": "^0.14.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.22.4",
     "@plasmohq/prettier-plugin-sort-imports": "3.6.4",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
     "@types/chrome": "0.0.227",
+    "@types/jest": "^29.5.2",
     "@types/node": "18.15.11",
     "@types/react": "18.0.32",
     "@types/react-dom": "18.0.11",
+    "babel-jest": "^29.5.0",
     "husky": "^8.0.3",
+    "jest": "^29.5.0",
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8",
+    "react-test-renderer": "^18.2.0",
+    "ts-jest": "^29.1.0",
     "typescript": "5.0.3"
   },
   "husky": {
