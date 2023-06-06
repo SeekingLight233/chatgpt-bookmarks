@@ -7,7 +7,8 @@ const lightTheme = {
   bookmarkHoverColor: "#e0e0e0",
   white: "#202123",
   bookmarkBg: "#F7F7F8",
-  bookmarkIconHoverColor: "#40414F"
+  bookmarkIconHoverColor: "#40414F",
+  groupLabelColor: "rgb(142,142,160)"
 }
 
 const darkTheme = {
@@ -19,7 +20,8 @@ const darkTheme = {
   bookmarkHoverColor: "#2A2B32",
   white: "rgb(236,236,241)",
   bookmarkBg: "#444654",
-  bookmarkIconHoverColor: "#fff"
+  bookmarkIconHoverColor: "#fff",
+  groupLabelColor: "rgb(142,142,160)"
 }
 
 const getTheme = () => {

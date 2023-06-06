@@ -19,7 +19,7 @@ import AlertIcons from "./DeleteAlert"
 interface BookmarkItemProps extends Bookmark {
   onEdit: (bookmark: Bookmark) => void
   onDelete: (omitBookmark: Omit<Bookmark, "title" | "createUnix">) => void
-  onClick: (bookmarkId: number) => void
+  onClick: (omitBookmark: Omit<Bookmark, "title" | "createUnix">) => void
   active?: boolean
 }
 
@@ -126,7 +126,10 @@ const BookmarkItem: React.FC<BookmarkItemProps> = (props) => {
   return (
     <div
       onClick={() => {
-        onClick(bookmarkId)
+        onClick({
+          sessionId,
+          bookmarkId
+        })
       }}
       style={{ ...styles.item, backgroundColor }}
       onMouseEnter={handleMouseEnter}

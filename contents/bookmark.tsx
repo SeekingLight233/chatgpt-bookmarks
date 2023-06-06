@@ -99,7 +99,6 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
       const linkBookmark = getBookmarkFromLink()
       if (appStore.init === false) {
         setTimeout(() => {
-          console.log("滚动！")
           scrollIntoBookmark(+linkBookmark)
         }, 1)
         appStore.init = true
