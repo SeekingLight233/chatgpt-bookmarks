@@ -53,17 +53,13 @@ const Sidebar = () => {
     initList()
 
     chrome.runtime.onMessage.addListener(function (
-      request,
-      sender,
-      sendResponse
+      request
     ) {
       if (request.message === "urlChange") {
         const curSessionId = getSessionId()
         bookmarkStore.curSessionId = curSessionId
       }
     })
-
-    // bookmarkStore.initList()
   })
 
   useEffect(() => {
@@ -91,7 +87,7 @@ const Sidebar = () => {
 
     return () => {
       if (scrollDom) {
-        scrollDom.removeEventListener("scroll", () => {})
+        scrollDom.removeEventListener("scroll", () => { })
       }
     }
   }, [scrollDom])
