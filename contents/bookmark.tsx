@@ -8,17 +8,18 @@ import "./styles/base.css"
 import { useMemoizedFn } from "ahooks"
 import { useRef, useState } from "react"
 
-import { appStore, setShowEditBookmarkModal } from "~model/app"
-import { sideBarStore } from "~model/sidebar"
+import { appStore } from "~model/app"
+import {
+  type ElementWithbookmarkId,
+  getBookmarkFromLink,
+  getSessionId,
+  getbookmarkIdByDom,
+  scrollIntoBookmark,
+  sideBarStore
+} from "~model/sidebar"
 import { domIdMap, getBottomToolsDoms } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
-
-import {
-  getBookmarkFromLink,
-  getSessionId,
-  scrollIntoBookmark
-} from "./sidebar"
 
 const Bookmark = () => {
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
@@ -75,8 +76,6 @@ export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
 }
 
-type ElementWithbookmarkId = Element & { bookmarkId?: number }
-
 export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
   const btmToolsDoms = getBottomToolsDoms()
 
@@ -107,12 +106,6 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
   })
 
   return nodeList as unknown as NodeList
-}
-
-const getbookmarkIdByDom = (dom: ElementWithbookmarkId) => {
-  const rootParent = (dom.getRootNode() as ShadowRoot).host
-    .parentElement as ElementWithbookmarkId
-  return rootParent?.bookmarkId
 }
 
 export default Bookmark
