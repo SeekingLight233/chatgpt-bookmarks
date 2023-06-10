@@ -16,7 +16,7 @@
 //   })
 // })
 
-describe('first', () => {
+describe("first", () => {
   it("sum", () => {
     expect(1 + 2).toBe(3)
   })
