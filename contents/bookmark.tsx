@@ -9,7 +9,7 @@ import { useMemoizedFn } from "ahooks"
 import { useRef, useState } from "react"
 
 import { appStore, setShowEditBookmarkModal } from "~model/app"
-import { bookmarkStore } from "~model/bookmark"
+import { sideBarStore } from "~model/sidebar"
 import { domIdMap, getBottomToolsDoms } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
@@ -28,16 +28,16 @@ const Bookmark = () => {
     const curBookmarkDom = domRef.current
     const bookmarkId = getbookmarkIdByDom(curBookmarkDom)
     if (bookmarkId == null) return new Error("can not find bookmarkId")
-    const curBookmark = bookmarkStore.findBookMarkByBookmarkId(bookmarkId)
+    const curBookmark = sideBarStore.findBookMarkByBookmarkId(bookmarkId)
     if (curBookmark == null) {
-      bookmarkStore.onEdit({
+      sideBarStore.onEdit({
         bookmarkId,
         title: "",
         sessionId: getSessionId(),
         createUnix: new Date().getTime()
       })
     } else {
-      bookmarkStore.onEdit(curBookmark)
+      sideBarStore.onEdit(curBookmark)
     }
   })
 

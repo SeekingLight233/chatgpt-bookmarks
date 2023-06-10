@@ -1,4 +1,4 @@
-import type { Bookmark } from "~model/bookmark"
+import type { Bookmark } from "~model/sidebar"
 
 class Storage {
   private storage: chrome.storage.StorageArea

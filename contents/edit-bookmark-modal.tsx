@@ -5,7 +5,7 @@ import "./styles/base.css"
 
 import CrossIcon from "~components/Icons/CrossIcon"
 import { appStore, setShowEditBookmarkModal } from "~model/app"
-import { bookmarkStore, setTitle } from "~model/bookmark"
+import { setTitle, sideBarStore } from "~model/sidebar"
 import { createStyles } from "~utils/base"
 
 export const config: PlasmoCSConfig = {
@@ -21,7 +21,7 @@ const EditBookmarkModal = () => {
     curBookmarkId,
     curCreateUnix: curCreateTime,
     onSave
-  } = bookmarkStore
+  } = sideBarStore
 
   const { showEditBookmarkModal } = appStore
 

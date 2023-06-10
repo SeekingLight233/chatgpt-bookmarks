@@ -12,7 +12,7 @@ import ArrowIcon from "~components/Icons/ArrowIcon"
 import SearchBar from "~components/SearchBar"
 import TabBar, { type Tab } from "~components/TabBar"
 import { baseUrl } from "~config"
-import { type Bookmark, bookmarkStore } from "~model/bookmark"
+import { type Bookmark, sideBarStore } from "~model/sidebar"
 import { createStyles, pipe } from "~utils/base"
 import {
   distanceFromRight,
@@ -47,17 +47,15 @@ const Sidebar = () => {
   const [curTab, setCurTab] = useState(tabs[0].id)
   const [searchValue, setSearchValue] = useState("")
 
-  const { allBookmarks, curSessionId, initList } = bookmarkStore
+  const { allBookmarks, curSessionId, initList } = sideBarStore
 
   useMount(() => {
     initList()
 
-    chrome.runtime.onMessage.addListener(function (
-      request
-    ) {
+    chrome.runtime.onMessage.addListener(function (request) {
       if (request.message === "urlChange") {
         const curSessionId = getSessionId()
-        bookmarkStore.curSessionId = curSessionId
+        sideBarStore.curSessionId = curSessionId
       }
     })
   })
@@ -87,7 +85,7 @@ const Sidebar = () => {
 
     return () => {
       if (scrollDom) {
-        scrollDom.removeEventListener("scroll", () => { })
+        scrollDom.removeEventListener("scroll", () => {})
       }
     }
   }, [scrollDom])
@@ -112,10 +110,10 @@ const Sidebar = () => {
               key={idx}
               onClick={handleClickBookmark}
               onEdit={(bookmark) => {
-                bookmarkStore.onEdit(bookmark)
+                sideBarStore.onEdit(bookmark)
               }}
               active={activeId === bookmark.bookmarkId}
-              onDelete={bookmarkStore.onDelete}
+              onDelete={sideBarStore.onDelete}
               {...bookmark}
             />
           ))}
@@ -142,10 +140,10 @@ const Sidebar = () => {
         key={idx}
         onClick={handleClickBookmark}
         onEdit={(bookmark) => {
-          bookmarkStore.onEdit(bookmark)
+          sideBarStore.onEdit(bookmark)
         }}
         active={activeId === bookmark.bookmarkId}
-        onDelete={bookmarkStore.onDelete}
+        onDelete={sideBarStore.onDelete}
         {...bookmark}
       />
     ))
