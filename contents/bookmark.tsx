@@ -11,6 +11,7 @@ import { useRef, useState } from "react"
 import { appStore } from "~model/app"
 import {
   type ElementWithbookmarkId,
+  findBookMarkByBookmarkId,
   getBookmarkFromLink,
   getSessionId,
   getbookmarkIdByDom,
@@ -29,7 +30,7 @@ const Bookmark = () => {
     const curBookmarkDom = domRef.current
     const bookmarkId = getbookmarkIdByDom(curBookmarkDom)
     if (bookmarkId == null) return new Error("can not find bookmarkId")
-    const curBookmark = sideBarStore.findBookMarkByBookmarkId(bookmarkId)
+    const curBookmark = findBookMarkByBookmarkId(bookmarkId)
     if (curBookmark == null) {
       sideBarStore.onEdit({
         bookmarkId,

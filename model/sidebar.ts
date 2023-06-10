@@ -44,7 +44,7 @@ export const sideBarStore = resso({
 
   onAdd: (bookmark: Bookmark) => {
     // we need insert it to right position
-    const { bookmarkId, sessionId, title } = bookmark
+    const { bookmarkId } = bookmark
     const oriList = [...sideBarStore.allBookmarks]
 
     let index = oriList.findIndex((item) => item.bookmarkId > bookmarkId)
@@ -94,13 +94,6 @@ export const sideBarStore = resso({
       showToast("delete success")
       console.log("remove success")
     })
-  },
-
-  findBookMarkByBookmarkId: (bookmarkId: number): Bookmark | undefined => {
-    const bookmark = sideBarStore.allBookmarks.find(
-      (bookmark) => bookmark.bookmarkId === bookmarkId
-    )
-    return bookmark
   }
 })
 
@@ -109,6 +102,15 @@ export interface Bookmark {
   title: string
   sessionId: string
   createUnix: number
+}
+
+export const findBookMarkByBookmarkId = (
+  bookmarkId: number
+): Bookmark | undefined => {
+  const bookmark = sideBarStore.allBookmarks.find(
+    (bookmark) => bookmark.bookmarkId === bookmarkId
+  )
+  return bookmark
 }
 
 export const setTitle = (newTitle: string) => {
@@ -166,8 +168,10 @@ function setActiveIdOnUrl(activeId: number) {
 
 type GroupedBookmarks = { label: string; data: Bookmark[] }[]
 
-export function groupByDate(bookmarks: Bookmark[]): GroupedBookmarks {
-  const now = new Date()
+export function groupByDate(
+  bookmarks: Bookmark[],
+  now = new Date()
+): GroupedBookmarks {
   const oneDay = 24 * 60 * 60 * 1000 // milliseconds in a day
   const sevenDays = 7 * oneDay
   const thirtyDays = 30 * oneDay
