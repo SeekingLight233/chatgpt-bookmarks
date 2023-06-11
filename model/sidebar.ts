@@ -21,10 +21,12 @@ export const sideBarStore = resso({
   initList: () => {
     storage
       .getAll()
-      .then((allBookmarkObj) => {
-        const initList = Object.values(allBookmarkObj)
+      .then((allData) => {
+        const initList = Object.values(allData).filter(
+          (v) => typeof v === "object"
+        ) as Bookmark[]
         initList.sort((a, b) => a.bookmarkId - b.bookmarkId)
-        console.log("initList===", initList, allBookmarkObj)
+        console.log("initList===", initList, allData)
         sideBarStore.allBookmarks = initList
         sideBarStore.curSessionId = getSessionId()
       })

@@ -4,7 +4,51 @@ import { createStyles } from "~utils/base"
 
 import "./index.css"
 
+import { useDebounceEffect, useMount } from "ahooks"
+
+import {
+  dataSyncStore,
+  initData,
+  setNotionApiKey,
+  setNotionPageId,
+  settingNotionApiKey,
+  settingNotionPageId
+} from "~model/dataSync"
+import storage from "~utils/storage"
+
 function SettingPage() {
+  const { notionApiKey, notionPageId } = dataSyncStore
+
+  useMount(initData)
+
+  useDebounceEffect(
+    () => {
+      storage.set(settingNotionApiKey, notionApiKey)
+    },
+    [notionApiKey],
+    { wait: 200 }
+  )
+
+  useDebounceEffect(
+    () => {
+      storage.set(settingNotionPageId, notionPageId)
+    },
+    [notionPageId],
+    { wait: 200 }
+  )
+
+  const handleNotionApiKeyChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNotionApiKey(event.target.value)
+  }
+
+  const handleNotionPageIdChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNotionPageId(event.target.value)
+  }
+
   return (
     <main style={styles.page}>
       <div style={styles.container}>
@@ -25,11 +69,23 @@ function SettingPage() {
               <label htmlFor="notion-api-key" style={styles.label}>
                 Notion API Key:{" "}
               </label>
-              <input id="notion-api-key" type="text" style={styles.input} />
+              <input
+                value={notionApiKey}
+                onChange={handleNotionApiKeyChange}
+                id="notion-api-key"
+                type="text"
+                style={styles.input}
+              />
               <label htmlFor="notion-page-id" style={styles.label}>
                 Notion Page ID:{" "}
               </label>
-              <input id="notion-page-id" type="text" style={styles.input} />
+              <input
+                value={notionPageId}
+                onChange={handleNotionPageIdChange}
+                id="notion-page-id"
+                type="text"
+                style={styles.input}
+              />
             </div>
           </fieldset>
         </form>
@@ -80,7 +136,7 @@ const styles = createStyles({
   },
   input: {
     display: "block",
-    width: "100%",
+    width: "96%",
     padding: "5px",
     backgroundColor: "#555",
     color: "#fff",

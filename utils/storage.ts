@@ -1,5 +1,6 @@
 import type { Bookmark } from "~model/sidebar"
 
+type StorageValue = Bookmark | string
 class Storage {
   private storage: chrome.storage.StorageArea
 
@@ -7,7 +8,7 @@ class Storage {
     this.storage = isDevMode ? chrome.storage.local : chrome.storage.sync
   }
 
-  get(key: string): Promise<Bookmark> {
+  get(key: string): Promise<StorageValue> {
     return new Promise((resolve, reject) => {
       this.storage.get(key, (result) => {
         if (chrome.runtime.lastError) {
@@ -19,7 +20,7 @@ class Storage {
     })
   }
 
-  getAll(): Promise<Record<string, Bookmark>> {
+  getAll(): Promise<Record<string, StorageValue>> {
     return new Promise((resolve, reject) => {
       this.storage.get(null, (result) => {
         if (chrome.runtime.lastError) {
@@ -31,7 +32,7 @@ class Storage {
     })
   }
 
-  set(key: string, value: Bookmark): Promise<void> {
+  set(key: string, value: StorageValue): Promise<void> {
     return new Promise((resolve, reject) => {
       this.storage.set({ [key]: value }, () => {
         if (chrome.runtime.lastError) {
