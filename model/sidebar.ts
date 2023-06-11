@@ -9,7 +9,7 @@ import {
 } from "~utils/dom"
 import storage from "~utils/storage"
 
-import { setShowEditBookmarkModal, showToast } from "./app"
+import { setShowEditBookmarkModal, showToast, syncConversation } from "./app"
 
 export const sideBarStore = resso({
   allBookmarks: [] as Bookmark[],
@@ -71,9 +71,9 @@ export const sideBarStore = resso({
     }
 
     console.log("onSave", bookmark)
+    syncConversation(bookmark)
     const key = sessionId + "#" + bookmarkId
     storage.set(key, bookmark).then(() => {
-      console.log("save success")
       showToast("save success")
     })
     setShowEditBookmarkModal(false)
