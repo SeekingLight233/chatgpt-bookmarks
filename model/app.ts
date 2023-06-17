@@ -1,5 +1,7 @@
 import resso from "resso"
 
+import { sendToBackground } from "@plasmohq/messaging"
+
 import { domIdMap } from "~utils/dom"
 
 import type { Bookmark } from "./sidebar"
@@ -25,7 +27,17 @@ export async function syncConversation(bookmark: Bookmark) {
   )
   copyElem?.click?.()
 
-  const clipboardText = await navigator.clipboard.readText()
+  const markdownStr = await navigator.clipboard.readText()
+
+  console.log("markdownStr====", markdownStr)
+
+  const resp = await sendToBackground({
+    name: "saveConversation",
+    body: markdownStr
+  })
+
+  console.log("resp")
+
   return {
     success: true
   }

@@ -12,6 +12,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "@notionhq/client": "^2.2.5",
+    "@plasmohq/messaging": "^0.4.0",
+    "@tryfabric/martian": "^1.2.4",
     "ahooks": "^3.7.7",
     "plasmo": "^0.76.1",
     "react": "18.2.0",
