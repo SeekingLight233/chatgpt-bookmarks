@@ -1,53 +1,64 @@
-import * as React from "react"
+import * as React from "react";
+import { useState } from "react";
 
-import { createStyles } from "~utils/base"
+import { createStyles } from "~utils/base";
+import "./index.css";
 
-import "./index.css"
-
-import { useDebounceEffect, useMount } from "ahooks"
+import { useDebounceEffect, useMount } from "ahooks";
 
 import {
   dataSyncStore,
   initData,
   setNotionApiKey,
-  setNotionPageId,
+  setNotionPageIds,  // Change to notionPageIds
   settingNotionApiKey,
-  settingNotionPageId
-} from "~model/dataSync"
-import storage from "~utils/storage"
+  settingNotionPageIds  // Change to notionPageIds
+} from "~model/dataSync";
+import storage from "~utils/storage";
+import SyncIcon from "~components/Icons/SyncIcon";
 
 function SettingPage() {
-  const { notionApiKey, notionPageId } = dataSyncStore
+  const { notionApiKey, notionPageIds } = dataSyncStore;  // Change to notionPageIds
 
-  useMount(initData)
+  useMount(initData);
 
   useDebounceEffect(
     () => {
-      storage.set(settingNotionApiKey, notionApiKey)
+      storage.set(settingNotionApiKey, notionApiKey);
     },
     [notionApiKey],
     { wait: 200 }
-  )
+  );
 
   useDebounceEffect(
     () => {
-      storage.set(settingNotionPageId, notionPageId)
+      storage.set(settingNotionPageIds, notionPageIds);  // Change to notionPageIds
     },
-    [notionPageId],
+    [notionPageIds],  // Change to notionPageIds
     { wait: 200 }
-  )
+  );
 
   const handleNotionApiKeyChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setNotionApiKey(event.target.value)
-  }
+    setNotionApiKey(event.target.value);
+  };
 
-  const handleNotionPageIdChange = (
+  const handleNotionPageIdChange = (index: number) => ( // Update to handle array input
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setNotionPageId(event.target.value)
-  }
+    const newNotionPageIds = [...notionPageIds];
+    newNotionPageIds[index] = event.target.value;
+    setNotionPageIds(newNotionPageIds);
+  };
+
+  const addNotionPageId = () => {
+    setNotionPageIds([...notionPageIds, '']);
+  };
+
+  const removeNotionPageId = (index: number) => {
+    setNotionPageIds(notionPageIds.filter((_, idx) => idx !== index));
+  };
 
   return (
     <main style={styles.page}>
@@ -66,33 +77,41 @@ function SettingPage() {
             <legend>Data Sync</legend>
             <div>
               <h4>notion</h4>
-              <label htmlFor="notion-api-key" style={styles.label}>
-                Notion API Key:{" "}
-              </label>
               <input
                 value={notionApiKey}
+                placeholder="notion api key"
                 onChange={handleNotionApiKeyChange}
                 id="notion-api-key"
                 type="text"
                 style={styles.input}
               />
-              <label htmlFor="notion-page-id" style={styles.label}>
-                Notion Page ID:{" "}
-              </label>
-              <input
-                value={notionPageId}
-                onChange={handleNotionPageIdChange}
-                id="notion-page-id"
-                type="text"
-                style={styles.input}
-              />
+              {
+                notionPageIds.map((pageId, index) => ( // Map notionPageIds to multiple inputs
+                  <div style={styles.inputGroup} key={index}>
+                    <input
+                      id={`notion-page-id-${index}`}
+                      placeholder="notion page id"
+                      type="text"
+                      style={styles.input}
+                      value={pageId}
+                      onChange={(e) => handleNotionPageIdChange(e, index)}
+                    />
+
+                    <SyncIcon style={{marginTop:10}}></SyncIcon>
+                    {/* <button style={styles.removeButton} type="button" onClick={() => removeNotionPageId(index)}>-</button> */}
+                  </div>
+                ))
+              }
+              <button style={styles.addButton} type="button" onClick={addNotionPageId}>Add Page ID</button>
             </div>
           </fieldset>
         </form>
       </div>
     </main>
-  )
+  );
 }
+
+
 
 const styles = createStyles({
   page: {
@@ -143,7 +162,31 @@ const styles = createStyles({
     border: "1px solid #666",
     borderRadius: "5px",
     marginTop: "10px"
-  }
+  },
+  inputGroup: {
+    display: "flex",
+    alignItems: "center",
+  },
+
+  removeButton: {
+    marginLeft: "10px",
+    backgroundColor: "transparent",
+    color: "#fff",
+    border: "none",
+    cursor: "pointer",
+  },
+
+  addButton: {
+    display: "block",
+    width: "100%",
+    padding: "5px",
+    marginTop: "10px",
+    color: "#fff",
+    backgroundColor: "transparent",
+    border: "1px dashed #666",
+    borderRadius: "5px",
+    cursor: "pointer",
+  },
 })
 
 export default SettingPage

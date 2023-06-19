@@ -3,25 +3,25 @@ import resso from "resso"
 import storage from "~utils/storage"
 
 export const settingNotionApiKey = "__setting__notionApiKey"
-export const settingNotionPageId = "__setting__notionPageId"
+export const settingNotionPageIds = "__setting__notionPageIds" 
 
 export const dataSyncStore = resso({
   notionApiKey: "",
-  notionPageId: ""
+  notionPageIds: [""] 
 })
 
 export const setNotionApiKey = (notionApiKey: string) => {
   dataSyncStore.notionApiKey = notionApiKey
 }
 
-export const setNotionPageId = (notionPageId: string) => {
-  dataSyncStore.notionPageId = notionPageId
+export const setNotionPageIds = (notionPageIds: string[]) => { 
+  dataSyncStore.notionPageIds = notionPageIds 
 }
 
 export const initData = async () => {
   const notionApiKey = (await storage.get(settingNotionApiKey)) as string
-  const notionPageId = (await storage.get(settingNotionPageId)) as string
+  const notionPageIds = (await storage.get(settingNotionPageIds)) ?? [""]
 
   notionApiKey && setNotionApiKey(notionApiKey)
-  notionPageId && setNotionPageId(notionPageId)
+  notionPageIds && setNotionPageIds(notionPageIds)
 }
