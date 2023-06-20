@@ -16,6 +16,7 @@ import {
 } from "~model/dataSync";
 import storage from "~utils/storage";
 import SyncIcon from "~components/Icons/SyncIcon";
+import UnBindIcon from "~components/Icons/UnBindIcon";
 
 function SettingPage() {
   const { notionApiKey, notionPageIds } = dataSyncStore;  // Change to notionPageIds
@@ -97,8 +98,8 @@ function SettingPage() {
                       onChange={(e) => handleNotionPageIdChange(e, index)}
                     />
 
-                    <SyncIcon style={{marginTop:10}}></SyncIcon>
-                    {/* <button style={styles.removeButton} type="button" onClick={() => removeNotionPageId(index)}>-</button> */}
+                    {/* <SyncIcon loading={false} style={styles.icon}></SyncIcon> */}
+                    <UnBindIcon style={styles.icon} onClick={() => removeNotionPageId(index)}></UnBindIcon>
                   </div>
                 ))
               }
@@ -187,6 +188,7 @@ const styles = createStyles({
     borderRadius: "5px",
     cursor: "pointer",
   },
+  icon: { marginTop: 10, marginLeft: 6 }
 })
 
 export default SettingPage
