@@ -1,6 +1,7 @@
+import type { NotionPage } from "~model/dataSync"
 import type { Bookmark } from "~model/sidebar"
 
-type StorageValue = Bookmark | string
+type StorageValue = Bookmark | NotionPage[] | string
 class Storage {
   private storage: chrome.storage.StorageArea
 

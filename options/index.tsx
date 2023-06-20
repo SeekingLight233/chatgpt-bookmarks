@@ -10,16 +10,16 @@ import {
   dataSyncStore,
   initData,
   setNotionApiKey,
-  setNotionPageIds,  // Change to notionPageIds
+  setNotionPages,
   settingNotionApiKey,
-  settingNotionPageIds  // Change to notionPageIds
+  settingNotionPageIds
 } from "~model/dataSync";
 import storage from "~utils/storage";
 import SyncIcon from "~components/Icons/SyncIcon";
 import UnBindIcon from "~components/Icons/UnBindIcon";
 
 function SettingPage() {
-  const { notionApiKey, notionPageIds } = dataSyncStore;  // Change to notionPageIds
+  const { notionApiKey, notionPages } = dataSyncStore;
 
   useMount(initData);
 
@@ -33,9 +33,9 @@ function SettingPage() {
 
   useDebounceEffect(
     () => {
-      storage.set(settingNotionPageIds, notionPageIds);  // Change to notionPageIds
+      storage.set(settingNotionPageIds, notionPages);
     },
-    [notionPageIds],  // Change to notionPageIds
+    [notionPages],
     { wait: 200 }
   );
 
@@ -45,20 +45,18 @@ function SettingPage() {
     setNotionApiKey(event.target.value);
   };
 
-  const handleNotionPageIdChange = (index: number) => ( // Update to handle array input
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const newNotionPageIds = [...notionPageIds];
-    newNotionPageIds[index] = event.target.value;
-    setNotionPageIds(newNotionPageIds);
+  const handleNotionPageIdChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const newNotionPages = [...notionPages];
+    newNotionPages[index].id = event.target.value;
+    setNotionPages(newNotionPages);
   };
 
   const addNotionPageId = () => {
-    setNotionPageIds([...notionPageIds, '']);
+    setNotionPages([...notionPages, { id: "", title: "" }]);
   };
 
   const removeNotionPageId = (index: number) => {
-    setNotionPageIds(notionPageIds.filter((_, idx) => idx !== index));
+    setNotionPages(notionPages.filter((_, idx) => idx !== index));
   };
 
   return (
@@ -87,14 +85,14 @@ function SettingPage() {
                 style={styles.input}
               />
               {
-                notionPageIds.map((pageId, index) => ( // Map notionPageIds to multiple inputs
+                notionPages.map(({ id, title }, index) => ( // Map notionPageIds to multiple inputs
                   <div style={styles.inputGroup} key={index}>
                     <input
                       id={`notion-page-id-${index}`}
                       placeholder="notion page id"
                       type="text"
                       style={styles.input}
-                      value={pageId}
+                      value={id}
                       onChange={(e) => handleNotionPageIdChange(e, index)}
                     />
 
