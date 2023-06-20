@@ -3,7 +3,7 @@ import resso from "resso"
 import storage from "~utils/storage"
 
 export const settingNotionApiKey = "__setting__notionApiKey"
-export const settingNotionPageIds = "__setting__notionPageIds"
+export const settingNotionPages = "__setting__notionPages"
 
 export interface NotionPage {
   id: string,
@@ -25,7 +25,7 @@ export const setNotionPages = (notionPageIds: NotionPage[]) => {
 
 export const initData = async () => {
   const notionApiKey = (await storage.get(settingNotionApiKey)) as string
-  const notionPages = (await storage.get(settingNotionPageIds)) ?? [];
+  const notionPages = (await storage.get(settingNotionPages)) ?? [];
 
   notionApiKey && setNotionApiKey(notionApiKey)
   notionPages && setNotionPages(notionPages as NotionPage[])

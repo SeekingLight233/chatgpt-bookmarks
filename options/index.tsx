@@ -12,7 +12,7 @@ import {
   setNotionApiKey,
   setNotionPages,
   settingNotionApiKey,
-  settingNotionPageIds
+  settingNotionPages
 } from "~model/dataSync";
 import storage from "~utils/storage";
 import SyncIcon from "~components/Icons/SyncIcon";
@@ -33,7 +33,7 @@ function SettingPage() {
 
   useDebounceEffect(
     () => {
-      storage.set(settingNotionPageIds, notionPages);
+      storage.set(settingNotionPages, notionPages);
     },
     [notionPages],
     { wait: 200 }
