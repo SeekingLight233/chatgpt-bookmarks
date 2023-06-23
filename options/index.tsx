@@ -1,63 +1,74 @@
-import * as React from "react";
-import { useState } from "react";
+import * as React from "react"
+import { useState } from "react"
 
-import { createStyles } from "~utils/base";
-import "./index.css";
+import { createStyles } from "~utils/base"
 
-import { useDebounceEffect, useMount } from "ahooks";
+import "./index.css"
 
+import { useDebounceEffect, useMemoizedFn, useMount } from "ahooks"
+import toast, { Toaster } from "react-hot-toast"
+
+import HelpIcon from "~components/Icons/HelpIcon"
+import SyncIcon from "~components/Icons/SyncIcon"
+import UnBindIcon from "~components/Icons/UnBindIcon"
 import {
+  addNotionPageId,
+  bingNotionPage,
   dataSyncStore,
   initData,
+  removeNotionPageId,
   setNotionApiKey,
+  setNotionPageId,
+  setNotionPageTitle,
   setNotionPages,
   settingNotionApiKey,
   settingNotionPages
-} from "~model/dataSync";
-import storage from "~utils/storage";
-import SyncIcon from "~components/Icons/SyncIcon";
-import UnBindIcon from "~components/Icons/UnBindIcon";
+} from "~model/dataSync"
+import storage from "~utils/storage"
 
 function SettingPage() {
-  const { notionApiKey, notionPages } = dataSyncStore;
+  const { notionApiKey, notionPages } = dataSyncStore
+  const [loading, setLoading] = useState(false)
 
-  useMount(initData);
+  useMount(initData)
 
   useDebounceEffect(
     () => {
-      storage.set(settingNotionApiKey, notionApiKey);
+      console.log("persist notionApiKey:", notionApiKey)
+      storage.set(settingNotionApiKey, notionApiKey)
     },
     [notionApiKey],
     { wait: 200 }
-  );
+  )
 
   useDebounceEffect(
     () => {
-      storage.set(settingNotionPages, notionPages);
+      console.log("persist notionPages:", notionPages)
+      storage.set(settingNotionPages, notionPages)
     },
     [notionPages],
     { wait: 200 }
-  );
+  )
 
   const handleNotionApiKeyChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setNotionApiKey(event.target.value);
-  };
+    setNotionApiKey(event.target.value)
+  }
 
-  const handleNotionPageIdChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const newNotionPages = [...notionPages];
-    newNotionPages[index].id = event.target.value;
-    setNotionPages(newNotionPages);
-  };
-
-  const addNotionPageId = () => {
-    setNotionPages([...notionPages, { id: "", title: "" }]);
-  };
-
-  const removeNotionPageId = (index: number) => {
-    setNotionPages(notionPages.filter((_, idx) => idx !== index));
-  };
+  const handleClickSync = useMemoizedFn(
+    async (pageId: string, index: number) => {
+      setLoading(true)
+      const res = await bingNotionPage(pageId, notionApiKey)
+      setLoading(false)
+      if (res.success) {
+        toast.success("sync success")
+        setNotionPageTitle(res.title, index)
+      } else {
+        toast.error(res.message, { duration: 4000 })
+      }
+    }
+  )
 
   return (
     <main style={styles.page}>
@@ -75,7 +86,11 @@ function SettingPage() {
           <fieldset style={styles.fieldset}>
             <legend>Data Sync</legend>
             <div>
-              <h4>notion</h4>
+              <span style={styles.row}>
+                <h4>notion</h4>
+                <HelpIcon></HelpIcon>
+              </span>
+
               <input
                 value={notionApiKey}
                 placeholder="notion api key"
@@ -84,33 +99,51 @@ function SettingPage() {
                 type="text"
                 style={styles.input}
               />
-              {
-                notionPages.map(({ id, title }, index) => ( // Map notionPageIds to multiple inputs
+              {notionPages.map(({ pageId, title }, index) => {
+                const disabled = title ? true : false
+                return (
+                  // Map notionPageIds to multiple inputs
                   <div style={styles.inputGroup} key={index}>
                     <input
+                      key={`notion-page-title-${index}`}
                       id={`notion-page-id-${index}`}
                       placeholder="notion page id"
                       type="text"
-                      style={styles.input}
-                      value={id}
-                      onChange={(e) => handleNotionPageIdChange(e, index)}
+                      style={{
+                        ...styles.input,
+                        cursor: disabled ? "not-allowed" : "auto"
+                      }}
+                      value={title ? title : pageId}
+                      disabled={disabled}
+                      onChange={(e) => setNotionPageId(e.target.value, index)}
                     />
-
-                    {/* <SyncIcon loading={false} style={styles.icon}></SyncIcon> */}
-                    <UnBindIcon style={styles.icon} onClick={() => removeNotionPageId(index)}></UnBindIcon>
+                    {title ? (
+                      <UnBindIcon
+                        style={styles.icon}
+                        onClick={() => removeNotionPageId(index)}></UnBindIcon>
+                    ) : (
+                      <SyncIcon
+                        onClick={() => handleClickSync(pageId, index)}
+                        loading={loading}
+                        style={styles.icon}></SyncIcon>
+                    )}
                   </div>
-                ))
-              }
-              <button style={styles.addButton} type="button" onClick={addNotionPageId}>Add Page ID</button>
+                )
+              })}
+              <button
+                style={styles.addButton}
+                type="button"
+                onClick={addNotionPageId}>
+                Add Page ID
+              </button>
             </div>
           </fieldset>
         </form>
       </div>
+      <Toaster />
     </main>
-  );
+  )
 }
-
-
 
 const styles = createStyles({
   page: {
@@ -164,7 +197,7 @@ const styles = createStyles({
   },
   inputGroup: {
     display: "flex",
-    alignItems: "center",
+    alignItems: "center"
   },
 
   removeButton: {
@@ -172,7 +205,7 @@ const styles = createStyles({
     backgroundColor: "transparent",
     color: "#fff",
     border: "none",
-    cursor: "pointer",
+    cursor: "pointer"
   },
 
   addButton: {
@@ -184,9 +217,17 @@ const styles = createStyles({
     backgroundColor: "transparent",
     border: "1px dashed #666",
     borderRadius: "5px",
-    cursor: "pointer",
+    cursor: "pointer"
   },
-  icon: { marginTop: 10, marginLeft: 6 }
+  icon: { marginTop: 10, marginLeft: 6 },
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: 60,
+    height: 30,
+    alignItems: "center"
+  }
 })
 
 export default SettingPage

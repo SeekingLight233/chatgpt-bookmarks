@@ -58,6 +58,8 @@ class Storage {
   }
 
   clear(): Promise<void> {
+    console.log("clear all data!")
+
     return new Promise((resolve, reject) => {
       this.storage.clear(() => {
         if (chrome.runtime.lastError) {

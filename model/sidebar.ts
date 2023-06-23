@@ -9,7 +9,8 @@ import {
 } from "~utils/dom"
 import storage from "~utils/storage"
 
-import { setShowEditBookmarkModal, showToast, syncConversation } from "./app"
+import { setShowEditBookmarkModal, showToast } from "./app"
+import { syncConversation } from "./dataSync"
 
 export const sideBarStore = resso({
   allBookmarks: [] as Bookmark[],
