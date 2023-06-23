@@ -6,7 +6,7 @@ export function createStyles<T extends { [key: string]: CSSProperties }>(
   return styles
 }
 
-export function filterKeysByString<Value = any>(
+export function filterObjBySubStrKey<Value = any>(
   obj: Record<string, Value>,
   searchString: string
 ): Record<string, Value> {

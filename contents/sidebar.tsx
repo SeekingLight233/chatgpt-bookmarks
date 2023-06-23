@@ -136,6 +136,7 @@ const Sidebar = () => {
 
   const renderCurrentBookmarks = (list: Bookmark[]) => {
     const currentBookmark = filterByCurSessionId(list)
+    if (currentBookmark.length === 0) return <Empty></Empty>
     return currentBookmark.map((bookmark, idx) => (
       <BookmarkItem
         key={idx}

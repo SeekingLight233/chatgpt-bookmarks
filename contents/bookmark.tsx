@@ -11,14 +11,14 @@ import { useRef, useState } from "react"
 import { appStore } from "~model/app"
 import {
   type ElementWithbookmarkId,
-  findBookMarkByBookmarkId,
+  findBookmarkByBookmarkId,
   getBookmarkFromLink,
   getSessionId,
   getbookmarkIdByDom,
   scrollIntoBookmark,
   sideBarStore
 } from "~model/sidebar"
-import { domIdMap, getBottomToolsDoms } from "~utils/dom"
+import { domIdMap, getBottomToolsDoms, getQuestionTitle } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 
@@ -30,16 +30,17 @@ const Bookmark = () => {
     const curBookmarkDom = domRef.current
     const bookmarkId = getbookmarkIdByDom(curBookmarkDom)
     if (bookmarkId == null) return new Error("can not find bookmarkId")
-    const curBookmark = findBookMarkByBookmarkId(bookmarkId)
-    if (curBookmark == null) {
+    const targetBookmark = findBookmarkByBookmarkId(bookmarkId)
+    if (targetBookmark == null) {
+      const questionTitle = getQuestionTitle(bookmarkId)
       sideBarStore.onEdit({
         bookmarkId,
-        title: "",
+        title: questionTitle,
         sessionId: getSessionId(),
         createUnix: new Date().getTime()
       })
     } else {
-      sideBarStore.onEdit(curBookmark)
+      sideBarStore.onEdit(targetBookmark)
     }
   })
 
@@ -97,7 +98,7 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
 
     if (idx > 0 && idx === btmToolsDoms.length - 1) {
       const linkBookmark = getBookmarkFromLink()
-      if (appStore.init === false) {
+      if (appStore.init === false && linkBookmark) {
         setTimeout(() => {
           scrollIntoBookmark(+linkBookmark)
         }, 1)

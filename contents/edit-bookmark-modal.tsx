@@ -53,6 +53,7 @@ const EditBookmarkModal = () => {
               value={curTitle}
               onChange={handleInputChange}
               rows={5}
+              maxLength={200}
             />
             <button style={styles.confirmButton} onClick={handleSubmit}>
               Confirm

@@ -50,3 +50,15 @@ export function distanceFromRight(domElement: Element) {
   const distance = viewportWidth - rect.right
   return distance
 }
+
+export function getQuestionTitle(bookmarkId: number) {
+  const conversationDom = domIdMap.getDomById(bookmarkId)
+  const pDom = conversationDom.parentElement?.parentElement
+  const preDom = pDom?.previousElementSibling
+  const innerStr =
+    preDom?.firstElementChild?.children?.[1]?.firstChild.textContent.slice(
+      0,
+      200
+    )
+  return innerStr ?? ""
+}

@@ -1,6 +1,7 @@
 import resso from "resso"
 
 import { baseUrl } from "~config"
+import { filterObjBySubStrKey } from "~utils/base"
 import {
   distanceFromRight,
   domIdMap,
@@ -12,22 +13,25 @@ import storage from "~utils/storage"
 import { setShowEditBookmarkModal, showToast } from "./app"
 import { syncConversation } from "./dataSync"
 
+const bookmarkKey = "__bookmark__"
+
 export const sideBarStore = resso({
   allBookmarks: [] as Bookmark[],
-  curTitle: "",
+  curTitle: null,
   curSessionId: "",
   curBookmarkId: null,
   curCreateUnix: new Date().getTime(),
 
   initList: () => {
+    console.log("domIdMap===", domIdMap)
+
     storage
       .getAll()
       .then((allData) => {
-        const initList = Object.values(allData).filter(
-          (v) => typeof v === "object"
-        ) as Bookmark[]
+        const bookmarkObj = filterObjBySubStrKey(allData, bookmarkKey)
+        const initList = Object.values(bookmarkObj) as Bookmark[]
         initList.sort((a, b) => a.bookmarkId - b.bookmarkId)
-        console.log("initList===", initList, allData)
+        console.log("init bookmark===", initList, allData)
         sideBarStore.allBookmarks = initList
         sideBarStore.curSessionId = getSessionId()
       })
@@ -75,7 +79,7 @@ export const sideBarStore = resso({
 
     console.log("onSave", bookmark)
     syncConversation(bookmark)
-    const key = sessionId + "#" + bookmarkId
+    const key = bookmarkKey + sessionId + "#" + bookmarkId
     storage.set(key, bookmark).then(() => {
       showToast("save success")
     })
@@ -92,7 +96,7 @@ export const sideBarStore = resso({
       oriList.splice(targetIdx, 1)
       sideBarStore.allBookmarks = oriList
     }
-    const key = sessionId + "#" + bookmarkId
+    const key = bookmarkKey + sessionId + "#" + bookmarkId
     storage.remove(key).then(() => {
       showToast("delete success")
       console.log("remove success")
@@ -107,7 +111,7 @@ export interface Bookmark {
   createUnix: number
 }
 
-export const findBookMarkByBookmarkId = (
+export const findBookmarkByBookmarkId = (
   bookmarkId: number
 ): Bookmark | undefined => {
   const bookmark = sideBarStore.allBookmarks.find(
