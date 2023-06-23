@@ -41,6 +41,7 @@ export const sideBarStore = resso({
   },
 
   onEdit: (bookmark: Bookmark) => {
+    sideBarStore.clearCurBookmark()
     const { bookmarkId, sessionId, title, createUnix: createTime } = bookmark
     setShowEditBookmarkModal(true)
     sideBarStore.curBookmarkId = bookmarkId
@@ -101,6 +102,12 @@ export const sideBarStore = resso({
       showToast("delete success")
       console.log("remove success")
     })
+  },
+
+  clearCurBookmark: () => {
+    sideBarStore.curBookmarkId = null
+    sideBarStore.curTitle = null
+    sideBarStore.curCreateUnix = new Date().getTime()
   }
 })
 
@@ -114,8 +121,10 @@ export interface Bookmark {
 export const findBookmarkByBookmarkId = (
   bookmarkId: number
 ): Bookmark | undefined => {
+  const curSessionId = getSessionId()
   const bookmark = sideBarStore.allBookmarks.find(
-    (bookmark) => bookmark.bookmarkId === bookmarkId
+    (bookmark) =>
+      bookmark.bookmarkId === bookmarkId && curSessionId === bookmark.sessionId
   )
   return bookmark
 }

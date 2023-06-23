@@ -31,8 +31,10 @@ const Bookmark = () => {
     const bookmarkId = getbookmarkIdByDom(curBookmarkDom)
     if (bookmarkId == null) return new Error("can not find bookmarkId")
     const targetBookmark = findBookmarkByBookmarkId(bookmarkId)
+    console.log("targetBookmark===", targetBookmark)
     if (targetBookmark == null) {
       const questionTitle = getQuestionTitle(bookmarkId)
+
       sideBarStore.onEdit({
         bookmarkId,
         title: questionTitle,
