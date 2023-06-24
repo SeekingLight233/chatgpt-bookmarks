@@ -2,6 +2,7 @@ import resso from "resso"
 
 import { sendToBackground } from "@plasmohq/messaging"
 
+import type { SaveConversationBody } from "~background/messages/saveConversation"
 import { domIdMap } from "~utils/dom"
 import storage from "~utils/storage"
 
@@ -14,6 +15,11 @@ export interface NotionPage {
   pageId: string
   title: string
   sessionId?: string
+}
+
+export interface NotionConfig {
+  notionApiKey: string
+  pageId: string
 }
 
 export const dataSyncStore = resso({
@@ -87,7 +93,11 @@ export const removeNotionPageId = (index: number) => {
   setNotionPages(dataSyncStore.notionPages.filter((_, idx) => idx !== index))
 }
 
-export async function syncConversation(bookmark: Bookmark) {
+export async function syncConversation(
+  bookmark: Bookmark,
+  notionApiKey: string,
+  pageId: string
+) {
   const conversationDom = domIdMap.getDomById(bookmark.bookmarkId)
   const copyElem: HTMLButtonElement = conversationDom.querySelector(
     "div:nth-of-type(2) > div:first-of-type > button:first-of-type"
@@ -98,16 +108,17 @@ export async function syncConversation(bookmark: Bookmark) {
 
   console.log("markdownStr====", markdownStr)
 
-  const resp = await sendToBackground({
+  const resp = await sendToBackground<SaveConversationBody>({
     name: "saveConversation",
-    body: markdownStr
+    body: {
+      bookmark,
+      markdownStr,
+      notionApiKey,
+      pageId
+    }
   })
 
-  console.log("resp")
-
-  return {
-    success: true
-  }
+  return resp
 }
 
 export async function bingNotionPage(

@@ -33,3 +33,14 @@ export function pipe<T = any, R = T>(...functions: Func<T, R>[]): Func<T, R> {
     }, initialValue)
   }
 }
+
+// return YYYY-MM-DD HH:mm
+export function getFmtTime(createUnix: number): string {
+  const date = new Date(createUnix)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hour = ("0" + date.getHours()).slice(-2)
+  const minute = ("0" + date.getMinutes()).slice(-2)
+  return `${year}-${month}-${day} ${hour}:${minute}`
+}

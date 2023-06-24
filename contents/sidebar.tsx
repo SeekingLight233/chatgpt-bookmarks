@@ -15,6 +15,7 @@ import { baseUrl } from "~config"
 import {
   type Bookmark,
   getActiveId,
+  getBookmarkLink,
   getSessionId,
   getSiderbarWidth,
   groupByDate,
@@ -128,7 +129,7 @@ const Sidebar = () => {
     if (sessionId === curSessionId) {
       scrollIntoBookmark(bookmarkId)
     } else {
-      const newLink = `${baseUrl}${sessionId}#${bookmarkId}`
+      const newLink = getBookmarkLink(sessionId, bookmarkId)
       window.open(newLink, "_self")
     }
   })

@@ -6,13 +6,13 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   const { pageId, notionApiKey } = req.body
   const notionClient = new Client({ auth: notionApiKey })
   try {
-    const getPageResponse = await notionClient.pages.retrieve({
+    const getPageRes = await notionClient.pages.retrieve({
       page_id: pageId
     })
-    console.log("getPageResponse", getPageResponse)
+    console.log("getPageResponse", getPageRes)
     // @ts-ignore
     const title =
-      getPageResponse?.properties?.title?.title?.[0]?.plain_text ?? "Untitled"
+      getPageRes?.properties?.title?.title?.[0]?.plain_text ?? "Untitled"
     res.send({ success: true, title })
   } catch (error) {
     res.send({ success: false, message: error.message })

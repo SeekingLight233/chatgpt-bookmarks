@@ -11,7 +11,7 @@ import {
 import storage from "~utils/storage"
 
 import { setShowEditBookmarkModal, showToast } from "./app"
-import { syncConversation } from "./dataSync"
+import { type NotionConfig, syncConversation } from "./dataSync"
 
 const bookmarkKey = "__bookmark__"
 
@@ -63,7 +63,7 @@ export const sideBarStore = resso({
     sideBarStore.allBookmarks = oriList
   },
 
-  onSave: (bookmark: Bookmark) => {
+  onSave: async (bookmark: Bookmark, notionConfig?: NotionConfig) => {
     const { sessionId, bookmarkId } = bookmark
     const oriList = [...sideBarStore.allBookmarks]
     const targetIdx = oriList.findIndex(
@@ -75,14 +75,21 @@ export const sideBarStore = resso({
       oriList[targetIdx] = bookmark
       sideBarStore.allBookmarks = oriList
     }
-
-    console.log("onSave", bookmark)
-    syncConversation(bookmark)
     const key = bookmarkKey + sessionId + "#" + bookmarkId
     storage.set(key, bookmark).then(() => {
       showToast("save success")
     })
     setShowEditBookmarkModal(false)
+
+    if (notionConfig) {
+      const { notionApiKey, pageId } = notionConfig
+      const syncRes = await syncConversation(bookmark, notionApiKey, pageId)
+      if (syncRes.success) {
+        showToast("sync success")
+      } else {
+        showToast("sync fail: " + syncRes.message)
+      }
+    }
   },
 
   onDelete: (omitBookmark: Omit<Bookmark, "title">) => {
@@ -254,3 +261,6 @@ export const getbookmarkIdByDom = (dom: ElementWithbookmarkId) => {
     .parentElement as ElementWithbookmarkId
   return rootParent?.bookmarkId
 }
+
+export const getBookmarkLink = (sessionId: string, bookmarkId: number) =>
+  `${baseUrl}${sessionId}#${bookmarkId}`

@@ -32,7 +32,7 @@ const EditBookmarkModal = () => {
     onSave
   } = sideBarStore
 
-  const { notionPages } = dataSyncStore
+  const { notionPages, notionApiKey } = dataSyncStore
 
   const { showEditBookmarkModal } = appStore
 
@@ -43,12 +43,15 @@ const EditBookmarkModal = () => {
   }
 
   const handleSubmit = () => {
-    onSave({
-      title: curTitle,
-      sessionId: curSessionId,
-      bookmarkId: curBookmarkId,
-      createUnix: curCreateTime
-    })
+    onSave(
+      {
+        title: curTitle,
+        sessionId: curSessionId,
+        bookmarkId: curBookmarkId,
+        createUnix: curCreateTime
+      },
+      { notionApiKey, pageId: getPageIdbySessionId(curSessionId) }
+    )
   }
 
   const handleSelectChange = useMemoizedFn((notionPageId: string) => {
