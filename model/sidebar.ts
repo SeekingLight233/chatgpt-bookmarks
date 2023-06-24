@@ -22,9 +22,7 @@ export const sideBarStore = resso({
   curBookmarkId: null,
   curCreateUnix: new Date().getTime(),
 
-  initList: () => {
-    console.log("domIdMap===", domIdMap)
-
+  initBookmarks: () => {
     storage
       .getAll()
       .then((allData) => {

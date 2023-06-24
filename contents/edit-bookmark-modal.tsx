@@ -3,8 +3,17 @@ import React, { useState } from "react"
 
 import "./styles/base.css"
 
+import { useMemoizedFn, useMount } from "ahooks"
+
 import CrossIcon from "~components/Icons/CrossIcon"
+import Select from "~components/Select"
 import { appStore, setShowEditBookmarkModal } from "~model/app"
+import {
+  dataSyncStore,
+  getPageIdbySessionId,
+  initSetting,
+  setSessionIdByPageId
+} from "~model/dataSync"
 import { setTitle, sideBarStore } from "~model/sidebar"
 import { createStyles } from "~utils/base"
 
@@ -23,7 +32,11 @@ const EditBookmarkModal = () => {
     onSave
   } = sideBarStore
 
+  const { notionPages } = dataSyncStore
+
   const { showEditBookmarkModal } = appStore
+
+  useMount(initSetting)
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(event.target.value)
@@ -38,13 +51,23 @@ const EditBookmarkModal = () => {
     })
   }
 
+  const handleSelectChange = useMemoizedFn((notionPageId: string) => {
+    setSessionIdByPageId(notionPageId)
+  })
+
+  const options = notionPages.map(({ title, pageId }) => ({
+    value: pageId,
+    label: title
+  }))
+  const defaultSelect = getPageIdbySessionId(curSessionId)
+
   return (
     <>
       {showEditBookmarkModal && (
         <div style={styles.modal}>
           <div style={styles.modalContent}>
             <div style={styles.header}>
-              <span>Provide bookmark title</span>
+              <span>Edit bookmark</span>
               <CrossIcon
                 onClick={() => setShowEditBookmarkModal(false)}></CrossIcon>
             </div>
@@ -55,8 +78,13 @@ const EditBookmarkModal = () => {
               rows={5}
               maxLength={200}
             />
+            <Select
+              placeholder="select notion page"
+              defaultValue={defaultSelect}
+              onChange={handleSelectChange}
+              options={options}></Select>
             <button style={styles.confirmButton} onClick={handleSubmit}>
-              Confirm
+              Save
             </button>
           </div>
         </div>

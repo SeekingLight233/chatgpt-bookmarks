@@ -15,12 +15,11 @@ import {
   addNotionPageId,
   bingNotionPage,
   dataSyncStore,
-  initData,
+  initSetting,
   removeNotionPageId,
   setNotionApiKey,
   setNotionPageId,
   setNotionPageTitle,
-  setNotionPages,
   settingNotionApiKey,
   settingNotionPages
 } from "~model/dataSync"
@@ -30,7 +29,7 @@ function SettingPage() {
   const { notionApiKey, notionPages } = dataSyncStore
   const [loading, setLoading] = useState(false)
 
-  useMount(initData)
+  useMount(initSetting)
 
   useDebounceEffect(
     () => {

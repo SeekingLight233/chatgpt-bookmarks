@@ -48,11 +48,10 @@ const Sidebar = () => {
   const [curTab, setCurTab] = useState(tabs[0].id)
   const [searchValue, setSearchValue] = useState("")
 
-  const { allBookmarks, curSessionId, initList } = sideBarStore
+  const { allBookmarks, curSessionId, initBookmarks } = sideBarStore
 
   useMount(() => {
-    initList()
-
+    initBookmarks()
     chrome.runtime.onMessage.addListener(function (request) {
       if (request.message === "urlChange") {
         const curSessionId = getSessionId()

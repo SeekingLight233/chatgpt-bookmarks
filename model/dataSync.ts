@@ -5,7 +5,7 @@ import { sendToBackground } from "@plasmohq/messaging"
 import { domIdMap } from "~utils/dom"
 import storage from "~utils/storage"
 
-import type { Bookmark } from "./sidebar"
+import { type Bookmark, getSessionId } from "./sidebar"
 
 export const settingNotionApiKey = "__setting__notionApiKey"
 export const settingNotionPages = "__setting__notionPages"
@@ -13,6 +13,7 @@ export const settingNotionPages = "__setting__notionPages"
 export interface NotionPage {
   pageId: string
   title: string
+  sessionId?: string
 }
 
 export const dataSyncStore = resso({
@@ -20,12 +21,24 @@ export const dataSyncStore = resso({
   notionPages: [] as NotionPage[]
 })
 
+export const initSetting = async () => {
+  const notionApiKey = (await storage.get(settingNotionApiKey)) as string
+  const notionPages = (await storage.get(settingNotionPages)) ?? []
+
+  notionApiKey && setNotionApiKey(notionApiKey)
+  notionPages && setNotionPages(notionPages as NotionPage[])
+}
+
 export const setNotionApiKey = (notionApiKey: string) => {
   dataSyncStore.notionApiKey = notionApiKey
 }
 
-export const setNotionPages = (notionPageIds: NotionPage[]) => {
+export const setNotionPages = (
+  notionPageIds: NotionPage[],
+  persist = false
+) => {
   dataSyncStore.notionPages = notionPageIds
+  persist && storage.set(settingNotionPages, notionPageIds)
 }
 
 export const setNotionPageId = (pageId: string, index: number) => {
@@ -40,6 +53,29 @@ export const setNotionPageTitle = (title: string, index: number) => {
   setNotionPages(newNotionPages)
 }
 
+export const setSessionIdByPageId = (pageId: string) => {
+  const curSessionId = getSessionId()
+  const newNotionPages = [...dataSyncStore.notionPages]
+  const index = newNotionPages.findIndex(
+    (notionPage) => notionPage.pageId === pageId
+  )
+  if (index !== -1) {
+    newNotionPages[index].sessionId = curSessionId
+    setNotionPages(newNotionPages, true)
+  }
+}
+
+export const getPageIdbySessionId = (sessionId: string) => {
+  const notionPages = dataSyncStore.notionPages
+  const index = dataSyncStore.notionPages.findIndex(
+    (notionPage) => notionPage.sessionId === sessionId
+  )
+  if (index !== -1) {
+    return notionPages[index].pageId
+  }
+  return ""
+}
+
 export const addNotionPageId = () => {
   setNotionPages([
     ...dataSyncStore.notionPages,
@@ -49,14 +85,6 @@ export const addNotionPageId = () => {
 
 export const removeNotionPageId = (index: number) => {
   setNotionPages(dataSyncStore.notionPages.filter((_, idx) => idx !== index))
-}
-
-export const initData = async () => {
-  const notionApiKey = (await storage.get(settingNotionApiKey)) as string
-  const notionPages = (await storage.get(settingNotionPages)) ?? []
-
-  notionApiKey && setNotionApiKey(notionApiKey)
-  notionPages && setNotionPages(notionPages as NotionPage[])
 }
 
 export async function syncConversation(bookmark: Bookmark) {
