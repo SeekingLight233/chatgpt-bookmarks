@@ -113,7 +113,10 @@ const Sidebar = () => {
               onEdit={(bookmark) => {
                 sideBarStore.onEdit(bookmark)
               }}
-              active={activeId === bookmark.bookmarkId}
+              active={
+                activeId === bookmark.bookmarkId &&
+                curSessionId === bookmark.sessionId
+              }
               onDelete={sideBarStore.onDelete}
               {...bookmark}
             />
