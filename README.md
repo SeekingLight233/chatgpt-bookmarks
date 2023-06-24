@@ -2,6 +2,9 @@
 
 A chrome extension for managing chatgpt conversations.
 
+## 🎥Preview
+https://github.com/SeekingLight233/chatgpt-bookmarks/assets/44890048/33630952-ee4c-418b-b054-d882392f483d
+
 ## 🚀Features
 
 - Save each conversation as a bookmark.
