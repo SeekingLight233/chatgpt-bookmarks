@@ -25,7 +25,8 @@ const darkTheme = {
 }
 
 const getTheme = () => {
-  return isDarkMode() ? darkTheme : lightTheme
+  return darkTheme
+  // return isDarkMode() ? darkTheme : lightTheme
 }
 
 const theme = getTheme()

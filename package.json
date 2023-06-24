@@ -1,8 +1,8 @@
 {
   "name": "chatgpt-bookmarks",
-  "displayName": "Chatgpt bookmarks",
+  "displayName": "ChatGPT Bookmarks",
   "version": "0.0.1",
-  "description": "A basic Plasmo extension.",
+  "description": "A chrome extension for managing chatgpt conversations.",
   "author": "SeekingLight",
   "scripts": {
     "dev": "plasmo dev",
