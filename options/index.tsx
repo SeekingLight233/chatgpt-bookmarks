@@ -99,7 +99,7 @@ function SettingPage() {
                 placeholder="notion api key"
                 onChange={handleNotionApiKeyChange}
                 id="notion-api-key"
-                type="text"
+                type="password"
                 style={styles.input}
               />
               {notionPages.map(({ pageId, title }, index) => {
