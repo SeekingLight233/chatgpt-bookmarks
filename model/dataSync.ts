@@ -79,7 +79,7 @@ export const getPageIdbySessionId = (sessionId: string) => {
   if (index !== -1) {
     return notionPages[index].pageId
   }
-  return ""
+  return null
 }
 
 export const addNotionPageId = () => {
@@ -105,8 +105,6 @@ export async function syncConversation(
   copyElem?.click?.()
 
   const markdownStr = await navigator.clipboard.readText()
-
-  console.log("markdownStr====", markdownStr)
 
   const resp = await sendToBackground<SaveConversationBody>({
     name: "saveConversation",

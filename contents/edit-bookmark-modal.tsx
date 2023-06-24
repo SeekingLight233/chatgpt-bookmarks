@@ -83,7 +83,7 @@ const EditBookmarkModal = () => {
             />
             <Select
               placeholder="select notion page"
-              defaultValue={defaultSelect}
+              defaultValue={defaultSelect ?? ""}
               onChange={handleSelectChange}
               options={options}></Select>
             <button style={styles.confirmButton} onClick={handleSubmit}>

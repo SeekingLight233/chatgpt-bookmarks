@@ -26,7 +26,8 @@ export const domIdMap = new DomIdMap()
 export function isPartiallyInViewport(element: Element | null) {
   if (element === null) return false
 
-  const rect = element.getBoundingClientRect()
+  const rect = element?.getBoundingClientRect?.()
+  if (rect == null) return false
   const windowHeight =
     window.innerHeight || document.documentElement.clientHeight
   const windowWidth = window.innerWidth || document.documentElement.clientWidth
@@ -44,7 +45,7 @@ export const getBottomToolsDoms = () =>
 
 export function distanceFromRight(domElement: Element) {
   if (domElement == null) return 0
-  const rect = domElement.getBoundingClientRect()
+  const rect = domElement?.getBoundingClientRect?.()
   const viewportWidth =
     window.innerWidth || document.documentElement.clientWidth
   const distance = viewportWidth - rect.right

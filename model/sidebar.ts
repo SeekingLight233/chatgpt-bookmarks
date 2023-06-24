@@ -67,9 +67,9 @@ export const sideBarStore = resso({
     const { sessionId, bookmarkId } = bookmark
     const oriList = [...sideBarStore.allBookmarks]
     const targetIdx = oriList.findIndex(
-      (item) => item.bookmarkId === bookmarkId
+      (item) => item.bookmarkId === bookmarkId && item.sessionId === sessionId
     )
-    if (targetIdx == -1) {
+    if (targetIdx === -1) {
       sideBarStore.onAdd(bookmark)
     } else {
       oriList[targetIdx] = bookmark
@@ -81,7 +81,9 @@ export const sideBarStore = resso({
     })
     setShowEditBookmarkModal(false)
 
-    if (notionConfig) {
+    const shouldSyncData = notionConfig?.pageId != null && targetIdx === -1
+
+    if (shouldSyncData) {
       const { notionApiKey, pageId } = notionConfig
       const syncRes = await syncConversation(bookmark, notionApiKey, pageId)
       if (syncRes.success) {
