@@ -3,6 +3,7 @@
 A chrome extension for managing chatgpt conversations.
 
 ## 🎥Preview
+
 https://github.com/SeekingLight233/chatgpt-bookmarks/assets/44890048/33630952-ee4c-418b-b054-d882392f483d
 
 ## 🚀Features
@@ -20,7 +21,7 @@ Click here to install the extension: [chrome web store](https://chrome.google.co
 
 1. Click here to create a Notion API key: [Notion Integrations](https://www.notion.so/my-integrations)
 2. After creating, in the Notion page, click on the `...` on the right side, select `Add Connections`, and find the Notion integration you just created.
-![alt](./assets/add_connections.jpg)
+   ![alt](./assets/add_connections.jpg)
 3. In Chrome, right-click on the ChatGPT-Bookmarks extension icon, click on `Options` to enter the configuration page.
 4. On the configuration page, fill in the Notion API key and Notion page id.
 
