@@ -69,6 +69,10 @@ function SettingPage() {
     }
   )
 
+  const handleClickHelp = useMemoizedFn(() => {
+    window.open("https://www.notion.so/my-integrations")
+  })
+
   return (
     <main style={styles.page}>
       <div style={styles.container}>
@@ -87,7 +91,7 @@ function SettingPage() {
             <div>
               <span style={styles.row}>
                 <h4>notion</h4>
-                <HelpIcon></HelpIcon>
+                <HelpIcon onClick={handleClickHelp}></HelpIcon>
               </span>
 
               <input
