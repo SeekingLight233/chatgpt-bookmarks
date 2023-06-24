@@ -25,10 +25,7 @@ Click here to install the extension: [chrome web store](https://chrome.google.co
 3. In Chrome, right-click on the ChatGPT-Bookmarks extension icon, click on `Options` to enter the configuration page.
 4. On the configuration page, fill in the Notion API key and Notion page id.
 
-
 https://github.com/SeekingLight233/chatgpt-bookmarks/assets/44890048/3c0b10c6-8ec7-43fb-b04c-06f0b41cb3a4
-
-
 
 ⚠️: Notion page id is a string of characters in the URL of the Notion page. For example, `https://www.notion.so/ChatGPT-Bookmarks-0e1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6`, the Notion page id is `0e1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6`.
 
