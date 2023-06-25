@@ -38,10 +38,8 @@ function isDarkMode() {
     window.matchMedia &&
     window.matchMedia("(prefers-color-scheme: dark)").matches
   ) {
-    // 用户偏好是暗夜模式
     return true
   } else {
-    // 用户偏好不是暗夜模式
     return false
   }
 }

@@ -53,7 +53,7 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
+      "https://api.notion.com/*"
     ],
     "permissions": [
       "storage",
