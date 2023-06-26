@@ -3,8 +3,7 @@
 A chrome extension for managing chatgpt conversations.
 
 ## 🎥Preview
-
-https://github.com/SeekingLight233/chatgpt-bookmarks/assets/44890048/33630952-ee4c-418b-b054-d882392f483d
+https://github.com/SeekingLight233/chatgpt-bookmarks/assets/44890048/dbef0898-7a2e-4b88-982d-d604a920fc3c
 
 ## 🚀Features
 
@@ -28,6 +27,8 @@ The review process in the store may take some time. Meanwhile, you can proceed b
 https://github.com/SeekingLight233/chatgpt-bookmarks/assets/44890048/3c0b10c6-8ec7-43fb-b04c-06f0b41cb3a4
 
 ⚠️: Notion page id is a string of characters in the URL of the Notion page. For example, `https://www.notion.so/ChatGPT-Bookmarks-0e1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6`, the Notion page id is `0e1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6`.
+
+
 
 ## 🤝Contribution
 
