@@ -15,7 +15,8 @@ https://github.com/SeekingLight233/chatgpt-bookmarks/assets/44890048/33630952-ee
 
 ### Installation
 
-Click here to install the extension: [chrome web store](https://chrome.google.com/webstore/detail/chatgpt-bookmarks/okjgjgjgjgjgjgjgjgjgjgjgjgjgjgj).
+The store may take a few weeks to review. In the meantime, you can manually download and install it.
+
 
 ### Sync to notion config
 
