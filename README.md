@@ -15,8 +15,7 @@ https://github.com/SeekingLight233/chatgpt-bookmarks/assets/44890048/33630952-ee
 
 ### Installation
 
-The store may take a few weeks to review. In the meantime, you can manually download and install it.
-
+The review process in the store may take some time. Meanwhile, you can proceed by enabling Developer Mode in Chrome Extensions and manually loading the unzipped files.
 
 ### Sync to notion config
 
