@@ -14,7 +14,7 @@ https://github.com/SeekingLight233/chatgpt-bookmarks/assets/44890048/dbef0898-7a
 
 ### Installation
 
-The review process in the store may take some time. Meanwhile, you can proceed by enabling Developer Mode in Chrome Extensions and manually loading the unzipped files.
+Click here to install the extension: [chrome web store](https://chrome.google.com/webstore/detail/chatgpt-bookmarks/hagmmpbaflccbibjhbcnolbligcdildb?hl=zh-CN&authuser=0).
 
 ### Sync to notion config
 
