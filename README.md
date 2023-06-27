@@ -18,6 +18,8 @@ The review process in the store may take some time. Meanwhile, you can proceed b
 
 ### Sync to notion config
 
+> As we are currently in the Beta version, to prevent the loss of your data, we strongly recommend that you enable this feature.
+
 1. Click here to create a Notion API key: [Notion Integrations](https://www.notion.so/my-integrations)
 2. After creating, in the Notion page, click on the `...` on the right side, select `Add Connections`, and find the Notion integration you just created.
    ![alt](./assets/add_connections.jpg)
