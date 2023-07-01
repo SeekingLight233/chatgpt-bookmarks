@@ -9,10 +9,10 @@ import CrossIcon from "~components/Icons/CrossIcon"
 import Select from "~components/Select"
 import { appStore, setShowEditBookmarkModal } from "~model/app"
 import {
+  bindPageIdBySessionId,
   dataSyncStore,
   getPageIdbySessionId,
-  initSetting,
-  setSessionIdByPageId
+  initSetting
 } from "~model/dataSync"
 import { setTitle, sideBarStore } from "~model/sidebar"
 import { createStyles } from "~utils/base"
@@ -55,7 +55,7 @@ const EditBookmarkModal = () => {
   }
 
   const handleSelectChange = useMemoizedFn((notionPageId: string) => {
-    setSessionIdByPageId(notionPageId)
+    bindPageIdBySessionId(notionPageId)
   })
 
   const options = notionPages.map(({ title, pageId }) => ({

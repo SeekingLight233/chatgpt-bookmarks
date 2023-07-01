@@ -14,7 +14,7 @@ export const settingNotionPages = "__setting__notionPages"
 export interface NotionPage {
   pageId: string
   title: string
-  sessionId?: string
+  bindedSessionIds: string[]
 }
 
 export interface NotionConfig {
@@ -43,6 +43,8 @@ export const setNotionPages = (
   notionPageIds: NotionPage[],
   persist = false
 ) => {
+  console.log("setNotionPages===", notionPageIds)
+
   dataSyncStore.notionPages = notionPageIds
   persist && storage.set(settingNotionPages, notionPageIds)
 }
@@ -59,22 +61,31 @@ export const setNotionPageTitle = (title: string, index: number) => {
   setNotionPages(newNotionPages)
 }
 
-export const setSessionIdByPageId = (pageId: string) => {
+export const bindPageIdBySessionId = (pageId: string) => {
   const curSessionId = getSessionId()
   const newNotionPages = [...dataSyncStore.notionPages]
-  const index = newNotionPages.findIndex(
+  const bindedPageIdx = newNotionPages.findIndex((notionPage) =>
+    notionPage.bindedSessionIds.includes(curSessionId)
+  )
+  if (bindedPageIdx !== -1) {
+    // curSessionId already binded a notion page, we need to unbind it before bind to new page
+    const needRemoveSessionIdPage = newNotionPages[bindedPageIdx]
+    needRemoveSessionIdPage.bindedSessionIds =
+      needRemoveSessionIdPage.bindedSessionIds.filter(
+        (sessionId) => sessionId !== curSessionId
+      )
+  }
+  const targetNotionPage = newNotionPages.find(
     (notionPage) => notionPage.pageId === pageId
   )
-  if (index !== -1) {
-    newNotionPages[index].sessionId = curSessionId
-    setNotionPages(newNotionPages, true)
-  }
+  targetNotionPage && targetNotionPage.bindedSessionIds.push(curSessionId)
+  setNotionPages(newNotionPages, true)
 }
 
 export const getPageIdbySessionId = (sessionId: string) => {
   const notionPages = dataSyncStore.notionPages
-  const index = dataSyncStore.notionPages.findIndex(
-    (notionPage) => notionPage.sessionId === sessionId
+  const index = dataSyncStore.notionPages.findIndex((notionPage) =>
+    notionPage.bindedSessionIds.includes(sessionId)
   )
   if (index !== -1) {
     return notionPages[index].pageId
@@ -85,7 +96,7 @@ export const getPageIdbySessionId = (sessionId: string) => {
 export const addNotionPageId = () => {
   setNotionPages([
     ...dataSyncStore.notionPages,
-    { pageId: undefined, title: undefined }
+    { pageId: undefined, title: undefined, bindedSessionIds: [] }
   ])
 }
 
