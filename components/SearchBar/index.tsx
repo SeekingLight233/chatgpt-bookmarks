@@ -16,7 +16,7 @@ const styles = createStyles({
     alignItems: "center",
     padding: "0 12px",
     color: "#fff",
-    marginTop: "19vh",
+    marginTop: "7vh",
     backgroundColor: theme.bookmarkHoverColor
   },
   input: {

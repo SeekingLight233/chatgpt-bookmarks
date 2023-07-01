@@ -213,6 +213,7 @@ const styles = createStyles({
     alignItems: "center"
   },
   bookmarksArea: {
+    height: "90vh",
     width: "100%",
     display: "flex",
     alignItems: "flex-start",
@@ -220,9 +221,9 @@ const styles = createStyles({
     paddingTop: 10
   },
   scrollArea: {
-    height: "90vh",
+    height: "70vh",
     width: "100%",
-    paddingBottom: "20%",
+    paddingBottom: "20vh",
     overflow: "scroll"
   },
   dateLabel: {
