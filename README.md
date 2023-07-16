@@ -1,3 +1,5 @@
+[点此跳转中文文档](README-zh.md)
+
 # ChatGPT Bookmarks
 
 A chrome extension for managing chatgpt conversations.
