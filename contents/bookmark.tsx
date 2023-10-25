@@ -87,15 +87,19 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
 
   btmToolsDoms.forEach((element, idx) => {
     const lastBtn = element.querySelector("div:first-child button:last-child")
-    const isAnswer = idx % 2 !== 0
+    const isAnswer = idx % 2 !== 0;
+    const elementWithbookmarkId = lastBtn?.parentElement as ElementWithbookmarkId;
     if (lastBtn && isAnswer) {
-      ;(lastBtn.parentElement as ElementWithbookmarkId).bookmarkId = idx
+      elementWithbookmarkId.bookmarkId = idx
       // TODO: find a better way to get conversationDom
       const conversationDom =
         lastBtn?.parentElement?.parentElement?.parentElement?.parentElement
       // set conversationDom to Id at this time
-      conversationDom && domIdMap.set(conversationDom, idx)
-      nodeList.push(lastBtn)
+      const targetId = domIdMap.getIdByDom(conversationDom);
+      if (targetId == null && conversationDom) {
+        conversationDom && domIdMap.set(conversationDom, idx)
+        nodeList.push(lastBtn)
+      }
     }
 
     if (idx > 0 && idx === btmToolsDoms.length - 1) {
