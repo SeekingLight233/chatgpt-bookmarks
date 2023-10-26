@@ -15,15 +15,18 @@ import {
   addNotionPageId,
   bingNotionPage,
   dataSyncStore,
+  fetchPageBlocks,
+  getBookmarksByBlocks,
   initSetting,
   removeNotionPageId,
   setNotionApiKey,
   setNotionPageId,
   setNotionPageTitle,
   settingNotionApiKey,
-  settingNotionPages
+  settingNotionPages,
 } from "~model/dataSync"
 import storage from "~utils/storage"
+import { importBookmarks } from "~model/sidebar"
 
 function SettingPage() {
   const { notionApiKey, notionPages } = dataSyncStore
@@ -57,14 +60,31 @@ function SettingPage() {
 
   const handleClickSync = useMemoizedFn(
     async (pageId: string, index: number) => {
+      const isExist = notionPages.filter(p => p.pageId === pageId).length > 1;
+      console.log("notionPages====", notionPages);
+      if (isExist) {
+        toast.error("The page is already exist!");
+        return
+      }
       setLoading(true)
-      const res = await bingNotionPage(pageId, notionApiKey)
-      setLoading(false)
-      if (res.success) {
-        toast.success("sync success")
-        setNotionPageTitle(res.title, index)
+      const bindRes = await bingNotionPage(pageId, notionApiKey)
+
+      if (bindRes.success) {
+        const fetchBlockRes = await fetchPageBlocks(pageId, notionApiKey);
+        if (fetchBlockRes.success) {
+          const newBookmarks = getBookmarksByBlocks(fetchBlockRes.blocks);
+          const importRes = importBookmarks(newBookmarks);
+          if (importRes.success) {
+            toast.success("sync success, please go back and refresh.")
+            setNotionPageTitle(bindRes.title, index)
+          } else {
+            toast.error(importRes.msg)
+          }
+          setLoading(false)
+        }
       } else {
-        toast.error(res.message, { duration: 4000 })
+        toast.error(bindRes.message, { duration: 4000 });
+        setLoading(false)
       }
     }
   )

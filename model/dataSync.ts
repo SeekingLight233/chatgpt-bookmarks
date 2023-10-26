@@ -7,6 +7,8 @@ import { domIdMap } from "~utils/dom"
 import storage from "~utils/storage"
 
 import { type Bookmark, getSessionId } from "./sidebar"
+import type { BlockObjectResponse, ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
+import { baseUrl } from "~config"
 
 export const settingNotionApiKey = "__setting__notionApiKey"
 export const settingNotionPages = "__setting__notionPages"
@@ -132,7 +134,7 @@ export async function syncConversation(
 
 export async function bingNotionPage(
   pageId: string,
-  notionApiKey
+  notionApiKey: string
 ): Promise<{ success: boolean; message?: string; title?: string }> {
   const resp = await sendToBackground({
     name: "bingNotionPage",
@@ -144,4 +146,39 @@ export async function bingNotionPage(
   console.log("bingNotionPage resp", resp)
 
   return resp
+}
+
+export async function fetchPageBlocks(pageId: string, notionApiKey: string) {
+  const resp = await sendToBackground({
+    name: "fetchPageBlocks",
+    body: {
+      pageId,
+      notionApiKey
+    }
+  })
+  console.log("fetchPageBlocks resp", resp)
+  return resp
+}
+
+export function getBookmarksByBlocks(rowBlocks: ListBlockChildrenResponse["results"]): Bookmark[] {
+  const targetBlocks = rowBlocks.filter((b) => {
+    const href = b?.paragraph?.rich_text?.[1]?.href as string
+    return href?.includes(baseUrl);
+  })
+  const newBookmarks = targetBlocks.map(block2Bookmark);
+  return newBookmarks
+}
+
+function block2Bookmark(block: BlockObjectResponse): Bookmark {
+  const linkText = block.paragraph?.rich_text?.[1]?.text
+  const { content, link } = linkText ?? {};
+  const [sessionId, bookmarkId] = link?.url?.replace("https://chat.openai.com/c/", "")?.split("#");
+  const createUnix = new Date(block.created_time).getTime();
+  return {
+    createUnix,
+    title: content,
+    sessionId,
+    bookmarkId: +bookmarkId,
+    fromNotionBlock: true
+  }
 }

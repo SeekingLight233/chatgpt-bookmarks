@@ -64,7 +64,7 @@ export const sideBarStore = resso({
   },
 
   onSave: async (bookmark: Bookmark, notionConfig?: NotionConfig) => {
-    const { sessionId, bookmarkId } = bookmark
+    const { sessionId, bookmarkId, fromNotionBlock } = bookmark
     const oriList = [...sideBarStore.allBookmarks]
     const targetIdx = oriList.findIndex(
       (item) => item.bookmarkId === bookmarkId && item.sessionId === sessionId
@@ -77,7 +77,7 @@ export const sideBarStore = resso({
     }
     const key = bookmarkKey + sessionId + "#" + bookmarkId
     storage.set(key, bookmark).then(() => {
-      showToast("save success")
+      if (fromNotionBlock == null) showToast("save success")
     })
     setShowEditBookmarkModal(false)
 
@@ -122,7 +122,8 @@ export interface Bookmark {
   bookmarkId: number
   title: string
   sessionId: string
-  createUnix: number
+  createUnix: number,
+  fromNotionBlock?: boolean
 }
 
 export const findBookmarkByBookmarkId = (
@@ -266,3 +267,14 @@ export const getbookmarkIdByDom = (dom: ElementWithbookmarkId) => {
 
 export const getBookmarkLink = (sessionId: string, bookmarkId: number) =>
   `${baseUrl}${sessionId}#${bookmarkId}`
+
+export function importBookmarks(bookmarks: Bookmark[]) {
+  try {
+    for (const bookmark of bookmarks) {
+      sideBarStore.onSave(bookmark)
+    }
+    return { success: true }
+  } catch (error) {
+    return { success: false, msg: error }
+  }
+}
