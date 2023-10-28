@@ -54,10 +54,10 @@ export function distanceFromRight(domElement: Element) {
 
 export function getQuestionTitle(bookmarkId: number) {
   const conversationDom = domIdMap.getDomById(bookmarkId)
-  const pDom = conversationDom.parentElement?.parentElement
+  const pDom = conversationDom.parentElement?.parentElement?.parentElement?.parentElement
   const preDom = pDom?.previousElementSibling
   const innerStr =
-    preDom?.firstElementChild?.children?.[1]?.firstChild.textContent.slice(
+    preDom?.firstElementChild.firstElementChild?.children?.[1]?.firstChild.textContent.slice(
       0,
       200
     )
