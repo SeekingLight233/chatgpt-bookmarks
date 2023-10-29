@@ -1,14 +1,17 @@
 const lightTheme = {
-  tintColor: "#ffffff",
-  bgColor: "#f0f0f0",
-  activeColor: "#dddddd",
+  tintColor: "#202123",
+  bgColor: "#343541",
+  activeColor: "#343541",
   iconTintColor: "rgb(172,172,190)",
-  iconHoverColor: "#ECECF1",
-  bookmarkHoverColor: "#e0e0e0",
-  white: "#202123",
-  bookmarkBg: "#F7F7F8",
-  bookmarkIconHoverColor: "#40414F",
-  groupLabelColor: "rgb(142,142,160)"
+  iconHoverColor: "#40414F",
+  bookmarkHoverBgColor: "#ECECF1",
+  bookmarkHoverColor: "#2A2B32",
+  white: "rgb(236,236,241)",
+  bookmarkBg: "#444654",
+  bookmarkBgColor: "#F7F7F8",
+  bookmarkIconHoverColor: "#000",
+  groupLabelColor: "rgb(142,142,160)",
+  sideBarTextColor: "#fff"
 }
 
 const darkTheme = {
@@ -17,23 +20,25 @@ const darkTheme = {
   activeColor: "#343541",
   iconTintColor: "rgb(172,172,190)",
   iconHoverColor: "#40414F",
+  bookmarkHoverBgColor: "#40414F",
   bookmarkHoverColor: "#2A2B32",
   white: "rgb(236,236,241)",
   bookmarkBg: "#444654",
+  bookmarkBgColor: "#444654",
   bookmarkIconHoverColor: "#fff",
-  groupLabelColor: "rgb(142,142,160)"
+  groupLabelColor: "rgb(142,142,160)",
+  sideBarTextColor: "#fff"
 }
 
 const getTheme = () => {
-  return darkTheme
-  // return isDarkMode() ? darkTheme : lightTheme
+  return isDarkMode() ? darkTheme : lightTheme
 }
 
 const theme = getTheme()
 
 export default theme
 
-function isDarkMode() {
+export function isDarkMode() {
   if (
     window.matchMedia &&
     window.matchMedia("(prefers-color-scheme: dark)").matches

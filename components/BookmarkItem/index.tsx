@@ -165,6 +165,7 @@ export const styles = createStyles({
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
     overflow: "hidden",
-    display: "inline-block"
+    display: "inline-block",
+    color: theme.sideBarTextColor
   }
 })

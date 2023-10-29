@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
 
 import { createStyles } from "~utils/base"
-import theme from "~utils/theme"
-
 function IndexPopup() {
   return (
     <div style={styles.container}>

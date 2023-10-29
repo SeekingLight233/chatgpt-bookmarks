@@ -54,7 +54,7 @@ const Bookmark = () => {
       onMouseLeave={handleMouseLeave}
       style={{
         ...styles.container,
-        backgroundColor: isHovered ? theme.iconHoverColor : theme.bookmarkBg
+        backgroundColor: isHovered ? theme.bookmarkHoverBgColor : theme.bookmarkBgColor
       }}>
       <BookmarkIcon
         color={

@@ -55,6 +55,7 @@ const styles = createStyles({
     height: 30,
     marginBottom: 20,
     backgroundColor: theme.bgColor,
+    color: theme.sideBarTextColor,
     borderRadius: 4
   }
 })

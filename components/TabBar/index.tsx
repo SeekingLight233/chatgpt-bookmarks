@@ -54,7 +54,8 @@ const styles = createStyles({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8
+    borderRadius: 8,
+    color: theme.sideBarTextColor
   }
 })
 

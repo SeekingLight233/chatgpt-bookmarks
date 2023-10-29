@@ -1,13 +1,10 @@
 import resso from "resso"
-
-import { domIdMap } from "~utils/dom"
-
-import type { Bookmark } from "./sidebar"
+import { isDarkMode } from "~utils/theme"
 
 export const appStore = resso({
   showEditBookmarkModal: false,
   curToastMsg: null,
-  init: false
+  init: false,
 })
 
 export function setShowEditBookmarkModal(isShow: boolean) {
