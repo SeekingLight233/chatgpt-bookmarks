@@ -5,8 +5,8 @@ import { createStyles } from "~utils/base"
 
 import "./styles/base.css"
 
-import { useMemoizedFn } from "ahooks"
-import { useRef, useState } from "react"
+import { useMemoizedFn, useMount } from "ahooks"
+import { useEffect, useRef, useState } from "react"
 
 import { appStore } from "~model/app"
 import {
@@ -18,17 +18,46 @@ import {
   scrollIntoBookmark,
   sideBarStore
 } from "~model/sidebar"
-import { domIdMap, getBottomToolsDoms, getQuestionTitle } from "~utils/dom"
+import { domIdMap, getAncestor, getBottomToolsDoms, getQuestionTitle } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 
 const Bookmark = () => {
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
   const domRef = useRef<HTMLDivElement>(null)
+  const curBookmarkDom = domRef?.current
+  const bookmarkId = getbookmarkIdByDom(curBookmarkDom)
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    if (domRef?.current) {
+      console.log("bookmarkId===", bookmarkId);
+
+      const parent = getAncestor((domRef?.current.getRootNode() as ShadowRoot)?.host, 6);
+      if (parent) {
+        const btnsDom = parent.querySelector("div.flex.gap-1");
+        const isLast = btnsDom.childNodes.length === 3;
+        if(isLast) setShow(true)
+
+        const handleMouseEnter = () => setShow(true);
+        const handleMouseLeave = () => {
+          setShow(isLast ? true : false);
+        }
+
+        parent.addEventListener("mouseenter", handleMouseEnter);
+        parent.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+          parent.removeEventListener('mouseenter', handleMouseEnter);
+          parent.removeEventListener('mouseleave', handleMouseLeave);
+        };
+
+      }
+
+    }
+  }, [domRef?.current])
 
   const handleClick = useMemoizedFn(() => {
-    const curBookmarkDom = domRef.current
-    const bookmarkId = getbookmarkIdByDom(curBookmarkDom)
     if (bookmarkId == null) return new Error("can not find bookmarkId")
     const targetBookmark = findBookmarkByBookmarkId(bookmarkId)
     console.log("targetBookmark===", targetBookmark)
@@ -52,14 +81,11 @@ const Bookmark = () => {
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{
-        ...styles.container,
-        backgroundColor: isHovered ? theme.bookmarkHoverBgColor : theme.bookmarkBgColor
-      }}>
-      <BookmarkIcon
+      style={styles.container}>
+      {show && <BookmarkIcon
         color={
           isHovered ? theme.bookmarkIconHoverColor : theme.iconTintColor
-        }></BookmarkIcon>
+        }></BookmarkIcon>}
     </div>
   )
 }
@@ -72,7 +98,8 @@ const styles = createStyles({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: "0.375rem",
-    cursor: "pointer"
+    cursor: "pointer",
+    marginTop: 1
   }
 })
 
@@ -90,10 +117,10 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
     const isAnswer = idx % 2 !== 0;
     const elementWithbookmarkId = lastBtn?.parentElement as ElementWithbookmarkId;
     if (lastBtn && isAnswer) {
-      elementWithbookmarkId.bookmarkId = idx
-      // TODO: find a better way to get conversationDom
-      const conversationDom =
-        lastBtn?.parentElement?.parentElement?.parentElement?.parentElement
+      elementWithbookmarkId.bookmarkId = idx;
+      const parentDom = lastBtn?.parentElement?.parentElement?.parentElement?.parentElement;
+      const conversationDom = parentDom.querySelector('div[data-message-author-role="assistant"]');
+
       // set conversationDom to Id at this time
       const targetId = domIdMap.getIdByDom(conversationDom);
       if (targetId == null && conversationDom) {

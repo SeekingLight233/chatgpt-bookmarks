@@ -54,12 +54,24 @@ export function distanceFromRight(domElement: Element) {
 
 export function getQuestionTitle(bookmarkId: number) {
   const conversationDom = domIdMap.getDomById(bookmarkId)
-  const pDom = conversationDom.parentElement?.parentElement?.parentElement?.parentElement
-  const preDom = pDom?.previousElementSibling
-  const innerStr =
-    preDom?.firstElementChild.firstElementChild?.children?.[1]?.firstChild.textContent.slice(
-      0,
-      200
-    )
+
+  const pDom = getAncestor(conversationDom, 6);
+  const preDom = pDom?.previousElementSibling;
+
+  const questionDom = preDom.querySelector('div[data-message-author-role="user"]');
+
+  const innerStr = questionDom.textContent.slice(0, 200)
   return innerStr ?? ""
 }
+
+export const getAncestor = (dom, level): Element => {
+  let currentElement = dom;
+  for (let i = 0; i < level; i++) {
+    if (currentElement.parentElement) {
+      currentElement = currentElement.parentElement;
+    } else {
+      return null;
+    }
+  }
+  return currentElement;
+};

@@ -260,6 +260,7 @@ export function groupByDate(
 
 export type ElementWithbookmarkId = Element & { bookmarkId?: number }
 export const getbookmarkIdByDom = (dom: ElementWithbookmarkId) => {
+  if (dom == null) return -1
   const rootParent = (dom.getRootNode() as ShadowRoot).host
     .parentElement as ElementWithbookmarkId
   return rootParent?.bookmarkId
