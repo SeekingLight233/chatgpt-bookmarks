@@ -112,7 +112,7 @@ export async function syncConversation(
   pageId: string
 ) {
   const conversationDom = domIdMap.getDomById(bookmark.bookmarkId)
-  const copyElem: HTMLButtonElement = conversationDom.querySelector(
+  const copyElem: HTMLButtonElement = conversationDom.parentElement?.parentElement.querySelector(
     "div:nth-of-type(2) > div:first-of-type > button:first-of-type"
   )
   copyElem?.click?.()

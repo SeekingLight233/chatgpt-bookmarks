@@ -98,7 +98,7 @@ export const sideBarStore = resso({
     const { sessionId, bookmarkId } = omitBookmark
     const oriList = [...sideBarStore.allBookmarks]
     const targetIdx = oriList.findIndex(
-      (item) => item.bookmarkId === bookmarkId
+      (item) => item.bookmarkId === bookmarkId && item.sessionId === sessionId
     )
     if (targetIdx != -1) {
       oriList.splice(targetIdx, 1)
