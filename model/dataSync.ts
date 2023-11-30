@@ -9,6 +9,7 @@ import { domIdMap } from "~utils/dom/domIdMap"
 import { type Bookmark, getSessionId } from "./sidebar"
 import type { BlockObjectResponse, ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
 import { baseUrl } from "~config"
+import $ from "~utils/dom/selector"
 
 export const settingNotionApiKey = "__setting__notionApiKey"
 export const settingNotionPages = "__setting__notionPages"
