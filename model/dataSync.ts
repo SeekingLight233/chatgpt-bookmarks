@@ -3,8 +3,8 @@ import resso from "resso"
 import { sendToBackground } from "@plasmohq/messaging"
 
 import type { SaveConversationBody } from "~background/messages/saveConversation"
-import { domIdMap } from "~utils/dom"
 import storage from "~utils/storage"
+import { domIdMap } from "~utils/dom/domIdMap"
 
 import { type Bookmark, getSessionId } from "./sidebar"
 import type { BlockObjectResponse, ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
@@ -112,9 +112,7 @@ export async function syncConversation(
   pageId: string
 ) {
   const conversationDom = domIdMap.getDomById(bookmark.bookmarkId)
-  const copyElem: HTMLButtonElement = conversationDom.parentElement?.parentElement.querySelector(
-    "div:nth-of-type(2) > div:first-of-type > button:first-of-type"
-  )
+  const copyElem = $.getCopyElem(conversationDom)
   copyElem?.click?.()
 
   const markdownStr = await navigator.clipboard.readText()

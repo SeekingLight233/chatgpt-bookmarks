@@ -61,7 +61,6 @@ function SettingPage() {
   const handleClickSync = useMemoizedFn(
     async (pageId: string, index: number) => {
       const isExist = notionPages.filter(p => p.pageId === pageId).length > 1;
-      console.log("notionPages====", notionPages);
       if (isExist) {
         toast.error("The page is already exist!");
         return

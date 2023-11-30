@@ -18,9 +18,11 @@ import {
   scrollIntoBookmark,
   sideBarStore
 } from "~model/sidebar"
-import { domIdMap, getAncestor, getBottomToolsDoms, getQuestionTitle } from "~utils/dom"
+import { getAncestor, getQuestionTitle } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
+import { domIdMap } from "~utils/dom/domIdMap"
+import $ from "~utils/dom/selector"
 
 const Bookmark = () => {
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
@@ -31,13 +33,12 @@ const Bookmark = () => {
 
   useEffect(() => {
     if (domRef?.current) {
-      console.log("bookmarkId===", bookmarkId);
 
       const parent = getAncestor((domRef?.current.getRootNode() as ShadowRoot)?.host, 6);
       if (parent) {
         const btnsDom = parent.querySelector("div.flex.gap-1");
         const isLast = btnsDom.childNodes.length === 3;
-        if(isLast) setShow(true)
+        if (isLast) setShow(true)
 
         const handleMouseEnter = () => setShow(true);
         const handleMouseLeave = () => {
@@ -108,7 +109,7 @@ export const config: PlasmoCSConfig = {
 }
 
 export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
-  const btmToolsDoms = getBottomToolsDoms()
+  const btmToolsDoms = $.getBottomToolsDoms()
 
   const nodeList: Element[] = []
 

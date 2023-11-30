@@ -1,27 +1,4 @@
-class DomIdMap {
-  private domToId: WeakMap<Element, number>
-  private idToDom: Map<number, Element>
-
-  constructor() {
-    this.domToId = new WeakMap()
-    this.idToDom = new Map()
-  }
-
-  set(dom: Element, id: number): void {
-    this.domToId.set(dom, id)
-    this.idToDom.set(id, dom)
-  }
-
-  getDomById(id: number): Element | undefined {
-    return this.idToDom.get(id)
-  }
-
-  getIdByDom(dom: Element): number | undefined {
-    return this.domToId.get(dom)
-  }
-}
-
-export const domIdMap = new DomIdMap()
+import { domIdMap } from "./domIdMap";
 
 export function isPartiallyInViewport(element: Element | null) {
   if (element === null) return false
@@ -40,8 +17,7 @@ export function isPartiallyInViewport(element: Element | null) {
   )
 }
 
-export const getBottomToolsDoms = () =>
-  document.querySelectorAll(".flex.justify-between.lg\\:block")
+
 
 export function distanceFromRight(domElement: Element) {
   if (domElement == null) return 0

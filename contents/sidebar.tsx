@@ -24,6 +24,7 @@ import {
 } from "~model/sidebar"
 import { createStyles } from "~utils/base"
 import theme from "~utils/theme"
+import $ from "~utils/dom/selector"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
@@ -73,9 +74,7 @@ const Sidebar = () => {
     { wait: 200 }
   )
 
-  const scrollDom = document.querySelectorAll(
-    'div[class*="react-scroll-to-bottom"]'
-  )[1]
+  const scrollDom = $.getScrollDom();
 
   useEffect(() => {
     if (scrollDom) {
@@ -86,7 +85,7 @@ const Sidebar = () => {
 
     return () => {
       if (scrollDom) {
-        scrollDom.removeEventListener("scroll", () => {})
+        scrollDom.removeEventListener("scroll", () => { })
       }
     }
   }, [scrollDom])

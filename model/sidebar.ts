@@ -4,14 +4,13 @@ import { baseUrl } from "~config"
 import { filterObjBySubStrKey } from "~utils/base"
 import {
   distanceFromRight,
-  domIdMap,
-  getBottomToolsDoms,
   isPartiallyInViewport
 } from "~utils/dom"
+import { domIdMap } from "~utils/dom/domIdMap"
 import storage from "~utils/storage"
-
 import { setShowEditBookmarkModal, showToast } from "./app"
 import { type NotionConfig, syncConversation } from "./dataSync"
+import $ from "~utils/dom/selector"
 
 const bookmarkKey = "__bookmark__"
 
@@ -167,7 +166,7 @@ export function getSessionId() {
 }
 
 export function getSiderbarWidth() {
-  const firstConversationDom = getBottomToolsDoms()?.[0]?.parentElement
+  const firstConversationDom = $.getBottomToolsDoms()?.[0]?.parentElement
   const width = distanceFromRight(firstConversationDom)
   if (width < 280) return 280
   if (width > 350) return 350

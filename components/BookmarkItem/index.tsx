@@ -9,7 +9,6 @@ import DeleteIcon from "~components/Icons/DeleteIcon"
 import EditIcon from "~components/Icons/EditIcon"
 import type { Bookmark } from "~model/sidebar"
 import { createStyles } from "~utils/base"
-import { domIdMap } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 
