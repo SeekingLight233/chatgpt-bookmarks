@@ -1,7 +1,7 @@
 {
   "name": "chatgpt-bookmarks",
   "displayName": "ChatGPT Bookmarks",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A chrome extension for managing chatgpt conversations.",
   "author": "SeekingLight",
   "scripts": {
