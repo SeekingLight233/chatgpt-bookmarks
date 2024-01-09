@@ -25,6 +25,7 @@ import {
 import { createStyles } from "~utils/base"
 import theme from "~utils/theme"
 import $ from "~utils/dom/selector"
+import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*"]
@@ -56,8 +57,10 @@ const Sidebar = () => {
     initBookmarks()
     chrome.runtime.onMessage.addListener(function (request) {
       if (request.message === "urlChange") {
+        domWithBookmarkidMap.clear();
         const curSessionId = getSessionId()
-        sideBarStore.curSessionId = curSessionId
+        sideBarStore.curSessionId = curSessionId;
+        
       }
     })
   })

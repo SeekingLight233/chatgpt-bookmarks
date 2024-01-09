@@ -6,7 +6,7 @@ import {
   distanceFromRight,
   isPartiallyInViewport
 } from "~utils/dom"
-import { domIdMap } from "~utils/dom/domIdMap"
+import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 import storage from "~utils/storage"
 import { setShowEditBookmarkModal, showToast } from "./app"
 import { type NotionConfig, syncConversation } from "./dataSync"
@@ -143,7 +143,7 @@ export const setTitle = (newTitle: string) => {
 export function getActiveId(list: Bookmark[]) {
   return (
     list.find((bookmark) => {
-      const conversationDom = domIdMap.getDomById(bookmark.bookmarkId)
+      const conversationDom = domWithBookmarkidMap.getDomById(bookmark.bookmarkId)
       return isPartiallyInViewport(conversationDom)
     })?.bookmarkId ?? -1
   )
@@ -175,7 +175,7 @@ export function getSiderbarWidth() {
 
 export const scrollIntoBookmark = (bookmarkId: number) => {
   setActiveIdOnUrl(bookmarkId)
-  const conversationDom = domIdMap.getDomById(bookmarkId)
+  const conversationDom = domWithBookmarkidMap.getDomById(bookmarkId)
   if (conversationDom) {
     conversationDom.scrollIntoView({ behavior: "smooth", block: "start" })
   } else {

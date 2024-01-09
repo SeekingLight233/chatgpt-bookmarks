@@ -6,7 +6,7 @@ import { createStyles } from "~utils/base"
 import "./styles/base.css"
 
 import { useMemoizedFn, useMount } from "ahooks"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 import { appStore } from "~model/app"
 import {
@@ -21,40 +21,37 @@ import {
 import { getAncestor, getQuestionTitle } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
-import { domIdMap } from "~utils/dom/domIdMap"
+import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 import $ from "~utils/dom/selector"
+import { noRecommendedDVallue } from "~config"
 
 const Bookmark = () => {
-  const { isHovered, handleMouseEnter, handleMouseLeave } = useHover()
+  const { isHovered, handleMouseEnter, handleMouseLeave } = useHover();
+  const { curBookmarkIds } = appStore;
   const domRef = useRef<HTMLDivElement>(null)
   const curBookmarkDom = domRef?.current
   const bookmarkId = getbookmarkIdByDom(curBookmarkDom)
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(false);
+
+
 
   useEffect(() => {
     if (domRef?.current) {
-
       const parent = getAncestor((domRef?.current.getRootNode() as ShadowRoot)?.host, 6);
       if (parent) {
-        const btnsDom = parent.querySelector("div.flex.gap-1");
-        const isLast = btnsDom.childNodes.length === 3;
-        if (isLast) setShow(true)
-
-        const handleMouseEnter = () => setShow(true);
-        const handleMouseLeave = () => {
-          setShow(isLast ? true : false);
+        const _handleMouseEnter = () => {
+          setShow(true)
         }
-
-        parent.addEventListener("mouseenter", handleMouseEnter);
-        parent.addEventListener('mouseleave', handleMouseLeave);
-
+        const _handleMouseLeave = () => {
+          setShow(false);
+        }
+        parent.addEventListener("mouseenter", _handleMouseEnter);
+        parent.addEventListener('mouseleave', _handleMouseLeave);
         return () => {
-          parent.removeEventListener('mouseenter', handleMouseEnter);
-          parent.removeEventListener('mouseleave', handleMouseLeave);
+          parent.removeEventListener('mouseenter', _handleMouseEnter);
+          parent.removeEventListener('mouseleave', _handleMouseLeave);
         };
-
       }
-
     }
   }, [domRef?.current])
 
@@ -76,6 +73,13 @@ const Bookmark = () => {
     }
   })
 
+  const isLast = curBookmarkIds[curBookmarkIds.length - 1] === bookmarkId;
+
+  const shouldShow = useMemo(() => {
+    if(isLast) return true;
+    return show;
+  }, [isLast, show])
+
   return (
     <div
       ref={domRef}
@@ -83,7 +87,7 @@ const Bookmark = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={styles.container}>
-      {show && <BookmarkIcon
+      {shouldShow && <BookmarkIcon
         color={
           isHovered ? theme.bookmarkIconHoverColor : theme.iconTintColor
         }></BookmarkIcon>}
@@ -109,25 +113,24 @@ export const config: PlasmoCSConfig = {
 }
 
 export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
-  const btmToolsDoms = $.getBottomToolsDoms()
+  const btmToolsDoms = $.getBottomToolsDoms();
 
   const nodeList: Element[] = []
 
   btmToolsDoms.forEach((element, idx) => {
-    const lastBtn = element.querySelector("div:first-child button:last-child")
+    const anchorNode = $.getSvgByDValue(element, noRecommendedDVallue)?.parentElement?.parentElement;
+
     const isAnswer = idx % 2 !== 0;
-    const elementWithbookmarkId = lastBtn?.parentElement as ElementWithbookmarkId;
-    if (lastBtn && isAnswer) {
+    const elementWithbookmarkId = anchorNode?.parentElement as ElementWithbookmarkId;
+    if (anchorNode && isAnswer) {
       elementWithbookmarkId.bookmarkId = idx;
-      const parentDom = lastBtn?.parentElement?.parentElement?.parentElement?.parentElement;
+
+      const parentDom = getAncestor(anchorNode, 6);
       const conversationDom = parentDom.querySelector('div[data-message-author-role="assistant"]');
 
       // set conversationDom to Id at this time
-      const targetId = domIdMap.getIdByDom(conversationDom);
-      if (targetId == null && conversationDom) {
-        conversationDom && domIdMap.set(conversationDom, idx)
-        nodeList.push(lastBtn)
-      }
+      conversationDom && domWithBookmarkidMap.set(conversationDom, idx)
+      nodeList.push(anchorNode)
     }
 
     if (idx > 0 && idx === btmToolsDoms.length - 1) {

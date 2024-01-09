@@ -1,24 +1,43 @@
-class DomIdMap {
-  private domToId: WeakMap<Element, number>
-  private idToDom: Map<number, Element>
+import { appStore } from "~model/app"
+
+class DomWithBookmarkidMap {
+  private domTobookmarkId: WeakMap<Element, number>
+  private bookmarkiIdToDom: Map<number, Element>
 
   constructor() {
-    this.domToId = new WeakMap()
-    this.idToDom = new Map()
+    this.domTobookmarkId = new WeakMap()
+    this.bookmarkiIdToDom = new Map()
   }
 
   set(dom: Element, id: number): void {
-    this.domToId.set(dom, id)
-    this.idToDom.set(id, dom)
+    this.domTobookmarkId.set(dom, id)
+    this.bookmarkiIdToDom.set(id, dom);
+    appStore.curBookmarkIds = this.getAllIds()
   }
 
   getDomById(id: number): Element | undefined {
-    return this.idToDom.get(id)
+    return this.bookmarkiIdToDom.get(id)
   }
 
   getIdByDom(dom: Element): number | undefined {
-    return this.domToId.get(dom)
+    return this.domTobookmarkId.get(dom)
+  }
+
+  getIsLastBookmark(id: number) {
+    const seqs = Array.from(this.bookmarkiIdToDom.keys());
+    const lastId = seqs[seqs.length - 1];
+    return id === lastId
+  };
+
+  getAllIds() {
+    return Array.from(this.bookmarkiIdToDom.keys())
+  }
+
+  clear() {
+    console.log("clear map!");
+    this.domTobookmarkId = new WeakMap()
+    this.bookmarkiIdToDom = new Map()
   }
 }
 
-export const domIdMap = new DomIdMap()
+export const domWithBookmarkidMap = new DomWithBookmarkidMap()

@@ -1,4 +1,4 @@
-import { domIdMap } from "./domIdMap";
+import { domWithBookmarkidMap } from "./domIdMap";
 
 export function isPartiallyInViewport(element: Element | null) {
   if (element === null) return false
@@ -29,7 +29,7 @@ export function distanceFromRight(domElement: Element) {
 }
 
 export function getQuestionTitle(bookmarkId: number) {
-  const conversationDom = domIdMap.getDomById(bookmarkId)
+  const conversationDom = domWithBookmarkidMap.getDomById(bookmarkId)
 
   const pDom = getAncestor(conversationDom, 6);
   const preDom = pDom?.previousElementSibling;

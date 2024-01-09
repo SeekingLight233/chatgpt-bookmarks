@@ -32,6 +32,26 @@ class SelectManager {
     return scrollDom
   }
 
+  getSvgByDValue = (element: Element, d: string): SVGElement | null => {
+    const svgs = element.querySelectorAll('svg');
+
+    for (let i = 0; i < svgs.length; i++) {
+      const svg = svgs[i];
+      const paths = svg.querySelectorAll('path');
+
+      for (let j = 0; j < paths.length; j++) {
+        const path = paths[j];
+
+        if (path.getAttribute('d') === d) {
+          return path.parentElement as SVGElement
+        }
+      }
+    }
+
+    return null;
+  }
+
+
 }
 
 const $ = new SelectManager()

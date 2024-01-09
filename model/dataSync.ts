@@ -4,7 +4,7 @@ import { sendToBackground } from "@plasmohq/messaging"
 
 import type { SaveConversationBody } from "~background/messages/saveConversation"
 import storage from "~utils/storage"
-import { domIdMap } from "~utils/dom/domIdMap"
+import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 
 import { type Bookmark, getSessionId } from "./sidebar"
 import type { BlockObjectResponse, ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
@@ -112,7 +112,7 @@ export async function syncConversation(
   notionApiKey: string,
   pageId: string
 ) {
-  const conversationDom = domIdMap.getDomById(bookmark.bookmarkId)
+  const conversationDom = domWithBookmarkidMap.getDomById(bookmark.bookmarkId)
   const copyElem = $.getCopyElem(conversationDom)
   copyElem?.click?.()
 

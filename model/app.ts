@@ -5,6 +5,7 @@ export const appStore = resso({
   showEditBookmarkModal: false,
   curToastMsg: null,
   init: false,
+  curBookmarkIds: [],
 })
 
 export function setShowEditBookmarkModal(isShow: boolean) {
