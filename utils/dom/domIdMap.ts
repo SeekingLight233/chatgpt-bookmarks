@@ -37,6 +37,7 @@ class DomWithBookmarkidMap {
     console.log("clear map!");
     this.domTobookmarkId = new WeakMap()
     this.bookmarkiIdToDom = new Map()
+    appStore.curBookmarkIds = [];
   }
 }
 
