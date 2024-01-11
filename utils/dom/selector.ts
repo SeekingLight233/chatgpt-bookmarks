@@ -1,6 +1,8 @@
+import { copyDValue } from "~config";
+
 class SelectManager {
   $dataMessage = "div[data-message-author-role]"
-  $copyElem = "div:nth-of-type(2) > div:first-of-type > button:first-of-type"
+  $copyElem = "button"
   constructor() { }
 
   getBottomToolsDoms = () => {
@@ -18,7 +20,8 @@ class SelectManager {
   };
 
   getCopyElem = (conversationDom: Element) => {
-    const copyElem: HTMLButtonElement = conversationDom.parentElement?.parentElement.querySelector(
+    const pDom = conversationDom.parentElement?.parentElement;
+    const copyElem: HTMLButtonElement = pDom.lastChild.querySelector(
       this.$copyElem
     )
     return copyElem
@@ -32,8 +35,8 @@ class SelectManager {
     return scrollDom
   }
 
-  getSvgByDValue = (element: Element, d: string): SVGElement | null => {
-    const svgs = element.querySelectorAll('svg');
+  getSvgByDValue = (containerElem: Element, d: string): SVGElement | null => {
+    const svgs = containerElem.querySelectorAll('svg');
 
     for (let i = 0; i < svgs.length; i++) {
       const svg = svgs[i];
