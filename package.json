@@ -1,12 +1,12 @@
 {
   "name": "chatgpt-bookmarks",
   "displayName": "ChatGPT Bookmarks",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A chrome extension for managing chatgpt conversations.",
   "author": "SeekingLight",
   "scripts": {
     "dev": "plasmo dev",
-    "build": "plasmo build",
+    "build": "plasmo build && rm -f build/chrome-mv3-prod.zip && cd build && zip -r chrome-mv3-prod.zip chrome-mv3-prod",
     "package": "plasmo package",
     "format": "prettier --write .",
     "test": "jest"
