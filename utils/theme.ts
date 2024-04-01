@@ -1,5 +1,5 @@
 const lightTheme = {
-  tintColor: "#202123",
+  tintColor: "#171717",
   bgColor: "#343541",
   activeColor: "#343541",
   iconTintColor: "rgb(172,172,190)",
@@ -15,7 +15,7 @@ const lightTheme = {
 }
 
 const darkTheme = {
-  tintColor: "#202123",
+  tintColor: "#171717",
   bgColor: "#343541",
   activeColor: "#343541",
   iconTintColor: "rgb(217,217,227)",

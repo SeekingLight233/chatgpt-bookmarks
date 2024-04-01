@@ -1,6 +1,6 @@
 #sidebar {
   position: absolute;
-  background-color: #202123;
+  background-color: #171717;
   width: var(--bookmark-sidebar-width);
   height: 100vh;
   display: flex;

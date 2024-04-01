@@ -107,7 +107,7 @@ const styles = createStyles({
     alignItems: "center"
   },
   modalContent: {
-    backgroundColor: "#202123",
+    backgroundColor: "#171717",
     padding: "20px",
     display: "flex",
     flexDirection: "column",
