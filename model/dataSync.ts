@@ -113,9 +113,8 @@ export async function syncConversation(
   pageId: string
 ) {
   const conversationDom = domWithBookmarkidMap.getDomById(bookmark.bookmarkId)
-  const copyElem = $.getCopyElem(conversationDom)
-  copyElem?.click?.()
-
+  const copyBtn = $.getCopyElem(conversationDom).parentElement;
+  copyBtn?.click?.()
   const markdownStr = await navigator.clipboard.readText()
 
   const resp = await sendToBackground<SaveConversationBody>({

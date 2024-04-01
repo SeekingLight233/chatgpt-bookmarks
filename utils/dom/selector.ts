@@ -21,9 +21,7 @@ class SelectManager {
 
   getCopyElem = (conversationDom: Element) => {
     const pDom = conversationDom.parentElement?.parentElement;
-    const copyElem: HTMLButtonElement = pDom.lastChild.querySelector(
-      this.$copyElem
-    )
+    const copyElem = this.getSvgByDValue(pDom, copyDValue);
     return copyElem
   }
 
