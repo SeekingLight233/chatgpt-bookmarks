@@ -10,6 +10,7 @@ import { type Bookmark, getSessionId } from "./sidebar"
 import type { BlockObjectResponse, ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
 import { baseUrl } from "~config"
 import $ from "~utils/dom/selector"
+import { isDevMode } from "~utils/devUtils"
 
 export const settingNotionApiKey = "__setting__notionApiKey"
 export const settingNotionPages = "__setting__notionPages"
@@ -107,6 +108,19 @@ export const removeNotionPageId = (index: number) => {
   setNotionPages(dataSyncStore.notionPages.filter((_, idx) => idx !== index))
 }
 
+const getClipboardText = (): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      navigator.clipboard.readText().then((markdownStr) => {
+        if (isDevMode) console.log("getClipboardText===", getClipboardText);
+        resolve(markdownStr)
+      }).catch((err) => {
+        reject(err)
+      })
+    }, 1000);
+  })
+}
+
 export async function syncConversation(
   bookmark: Bookmark,
   notionApiKey: string,
@@ -115,7 +129,9 @@ export async function syncConversation(
   const conversationDom = domWithBookmarkidMap.getDomById(bookmark.bookmarkId)
   const copyBtn = $.getCopyElem(conversationDom).parentElement;
   copyBtn?.click?.()
-  const markdownStr = await navigator.clipboard.readText()
+  const markdownStr = await getClipboardText();
+
+  if (isDevMode) console.log("markdownStr===", markdownStr);
 
   const resp = await sendToBackground<SaveConversationBody>({
     name: "saveConversation",

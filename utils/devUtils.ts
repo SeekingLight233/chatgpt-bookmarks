@@ -11,3 +11,5 @@ function createThrottleLog() {
 }
 
 export const throttleLog = createThrottleLog();
+
+export const isDevMode = process.env.NODE_ENV === "development"

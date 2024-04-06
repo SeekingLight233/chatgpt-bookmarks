@@ -1,4 +1,5 @@
 import { copyDValue } from "~config";
+import { isDevMode } from "~utils/devUtils";
 
 class SelectManager {
   $dataMessage = "div[data-message-author-role]"
@@ -22,6 +23,7 @@ class SelectManager {
   getCopyElem = (conversationDom: Element) => {
     const pDom = conversationDom.parentElement?.parentElement;
     const copyElem = this.getSvgByDValue(pDom, copyDValue);
+    if (isDevMode) console.log("copyElem===", copyElem);
     return copyElem
   }
 

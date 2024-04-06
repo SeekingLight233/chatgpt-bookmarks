@@ -1,11 +1,12 @@
 import type { NotionPage } from "~model/dataSync"
 import type { Bookmark } from "~model/sidebar"
+import { isDevMode } from "./devUtils"
 
 type StorageValue = Bookmark | NotionPage[] | string
 class Storage {
   private storage: chrome.storage.StorageArea
 
-  constructor(isDevMode: boolean) {
+  constructor() {
     this.storage = isDevMode ? chrome.storage.local : chrome.storage.sync
   }
 
@@ -72,6 +73,5 @@ class Storage {
   }
 }
 
-const isDevMode = process.env.NODE_ENV === "development"
-const storage = new Storage(isDevMode)
+const storage = new Storage()
 export default storage
