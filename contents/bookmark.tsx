@@ -118,7 +118,7 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
   const nodeList: Element[] = []
 
   btmToolsDoms.forEach((element, idx) => {
-    const anchorNode = $.getSvgByDValue(element, noRecommendedDVallue)?.parentElement?.parentElement;
+    const anchorNode = $.getFirstSvgByDValue(element, noRecommendedDVallue)?.parentElement?.parentElement;
 
     const isAnswer = idx % 2 !== 0;
     const elementWithbookmarkId = anchorNode?.parentElement as ElementWithbookmarkId;

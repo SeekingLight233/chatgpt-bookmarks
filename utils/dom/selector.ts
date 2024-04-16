@@ -22,7 +22,8 @@ class SelectManager {
 
   getCopyElem = (conversationDom: Element) => {
     const pDom = conversationDom.parentElement?.parentElement;
-    const copyElem = this.getSvgByDValue(pDom, copyDValue);
+    if (isDevMode) console.log("Pdom======", pDom);
+    const copyElem = this.getLastSvgByDValue(pDom, copyDValue);
     if (isDevMode) console.log("copyElem===", copyElem);
     return copyElem
   }
@@ -35,7 +36,7 @@ class SelectManager {
     return scrollDom
   }
 
-  getSvgByDValue = (containerElem: Element, d: string): SVGElement | null => {
+  getFirstSvgByDValue = (containerElem: Element, d: string): SVGElement | null => {
     const svgs = containerElem.querySelectorAll('svg');
 
     for (let i = 0; i < svgs.length; i++) {
@@ -52,6 +53,26 @@ class SelectManager {
     }
 
     return null;
+  }
+
+  getLastSvgByDValue = (containerElem: Element, d: string): SVGElement | null => {
+    const svgs = containerElem.querySelectorAll('svg');
+    let lastMatch: SVGElement | null = null; // 用于存储最后一个匹配的SVG元素
+
+    for (let i = 0; i < svgs.length; i++) {
+      const svg = svgs[i];
+      const paths = svg.querySelectorAll('path');
+
+      for (let j = 0; j < paths.length; j++) {
+        const path = paths[j];
+
+        if (path.getAttribute('d') === d) {
+          lastMatch = path.parentElement as SVGElement;
+        }
+      }
+    }
+
+    return lastMatch;
   }
 
 
