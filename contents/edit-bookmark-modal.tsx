@@ -16,9 +16,10 @@ import {
 } from "~model/dataSync"
 import { setTitle, sideBarStore } from "~model/sidebar"
 import { createStyles } from "~utils/base"
+import { matchesUrlList } from "~config"
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://chat.openai.com/*"]
+  matches: matchesUrlList
 }
 
 export const getShadowHostId = () => "edit-bookmark-modal"

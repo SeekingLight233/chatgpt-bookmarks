@@ -12,7 +12,7 @@ import { createStyles } from "~utils/base"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 
-import { baseUrl } from "../../config/index"
+import { chatUrl } from "../../config/index"
 import AlertIcons from "./DeleteAlert"
 
 interface BookmarkItemProps extends Bookmark {
@@ -78,7 +78,7 @@ const BookmarkItem: React.FC<BookmarkItemProps> = (props) => {
 
   const handleClickCopy = useMemoizedFn((e) => {
     e.stopPropagation()
-    const copyLink = `${baseUrl}${sessionId}#${bookmarkId}`
+    const copyLink = `${chatUrl}${sessionId}#${bookmarkId}`
     navigator.clipboard
       .writeText(copyLink)
       .then(() => {

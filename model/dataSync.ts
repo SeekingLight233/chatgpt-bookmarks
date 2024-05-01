@@ -8,7 +8,7 @@ import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 
 import { type Bookmark, getSessionId } from "./sidebar"
 import type { BlockObjectResponse, ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
-import { baseUrl } from "~config"
+import { chatUrl } from "~config"
 import $ from "~utils/dom/selector"
 import { isDevMode } from "~utils/devUtils"
 
@@ -177,7 +177,7 @@ export async function fetchPageBlocks(pageId: string, notionApiKey: string) {
 export function getBookmarksByBlocks(rowBlocks: ListBlockChildrenResponse["results"]): Bookmark[] {
   const targetBlocks = rowBlocks.filter((b) => {
     const href = b?.paragraph?.rich_text?.[1]?.href as string
-    return href?.includes(baseUrl);
+    return href?.includes(chatUrl);
   })
   const newBookmarks = targetBlocks.map(block2Bookmark);
   return newBookmarks
@@ -186,7 +186,7 @@ export function getBookmarksByBlocks(rowBlocks: ListBlockChildrenResponse["resul
 function block2Bookmark(block: BlockObjectResponse): Bookmark {
   const linkText = block.paragraph?.rich_text?.[1]?.text
   const { content, link } = linkText ?? {};
-  const [sessionId, bookmarkId] = link?.url?.replace("https://chat.openai.com/c/", "")?.split("#");
+  const [sessionId, bookmarkId] = link?.url?.replace(chatUrl, "")?.split("#");
   const createUnix = new Date(block.created_time).getTime();
   return {
     createUnix,

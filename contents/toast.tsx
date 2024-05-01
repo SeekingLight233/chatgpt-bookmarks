@@ -1,11 +1,12 @@
 import type { PlasmoCSConfig } from "plasmo"
 import React, { useEffect, useState } from "react"
+import { matchesUrlList } from "~config"
 
 import { appStore } from "~model/app"
 import { createStyles } from "~utils/base"
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://chat.openai.com/*"]
+  matches: matchesUrlList
 }
 
 const Toast = ({ duration = 2500 }) => {

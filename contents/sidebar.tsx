@@ -11,7 +11,7 @@ import Empty from "~components/Empty"
 import ArrowIcon from "~components/Icons/ArrowIcon"
 import SearchBar from "~components/SearchBar"
 import TabBar, { type Tab } from "~components/TabBar"
-import { baseUrl } from "~config"
+import { chatUrl, matchesUrlList } from "~config"
 import {
   type Bookmark,
   getActiveId,
@@ -28,7 +28,7 @@ import $ from "~utils/dom/selector"
 import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://chat.openai.com/*"]
+  matches: matchesUrlList
 }
 
 // Inject into the ShadowDOM
@@ -60,7 +60,7 @@ const Sidebar = () => {
         domWithBookmarkidMap.clear();
         const curSessionId = getSessionId()
         sideBarStore.curSessionId = curSessionId;
-        
+
       }
     })
   })

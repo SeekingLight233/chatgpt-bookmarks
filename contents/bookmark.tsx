@@ -23,7 +23,7 @@ import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 import $ from "~utils/dom/selector"
-import { noRecommendedDVallue } from "~config"
+import { matchesUrlList, noRecommendedDVallue } from "~config"
 
 const Bookmark = () => {
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover();
@@ -76,7 +76,7 @@ const Bookmark = () => {
   const isLast = curBookmarkIds[curBookmarkIds.length - 1] === bookmarkId;
 
   const shouldShow = useMemo(() => {
-    if(isLast) return true;
+    if (isLast) return true;
     return show;
   }, [isLast, show])
 
@@ -109,7 +109,7 @@ const styles = createStyles({
 })
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://chat.openai.com/*"]
+  matches: matchesUrlList
 }
 
 export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {

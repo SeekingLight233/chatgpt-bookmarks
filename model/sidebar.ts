@@ -1,6 +1,6 @@
 import resso from "resso"
 
-import { baseUrl } from "~config"
+import { chatUrl } from "~config"
 import { filterObjBySubStrKey } from "~utils/base"
 import {
   distanceFromRight,
@@ -161,7 +161,7 @@ export function getBookmarkFromLink() {
 
 export function getSessionId() {
   const link = getSessionLink()
-  const sessionId = link.replace(baseUrl, "")
+  const sessionId = link.replace(chatUrl, "")
   return sessionId
 }
 
@@ -266,7 +266,7 @@ export const getbookmarkIdByDom = (dom: ElementWithbookmarkId) => {
 }
 
 export const getBookmarkLink = (sessionId: string, bookmarkId: number) =>
-  `${baseUrl}${sessionId}#${bookmarkId}`
+  `${chatUrl}${sessionId}#${bookmarkId}`
 
 export function importBookmarks(bookmarks: Bookmark[]) {
   try {
