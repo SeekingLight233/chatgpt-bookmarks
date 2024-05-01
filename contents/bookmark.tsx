@@ -23,7 +23,7 @@ import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 import $ from "~utils/dom/selector"
-import { matchesUrlList, noRecommendedDVallue } from "~config"
+import { noRecommendedDVallue } from "~config"
 
 const Bookmark = () => {
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover();
@@ -109,7 +109,7 @@ const styles = createStyles({
 })
 
 export const config: PlasmoCSConfig = {
-  matches: matchesUrlList
+  matches: ["https://chatgpt.com/*"]
 }
 
 export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {

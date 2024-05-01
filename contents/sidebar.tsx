@@ -11,7 +11,7 @@ import Empty from "~components/Empty"
 import ArrowIcon from "~components/Icons/ArrowIcon"
 import SearchBar from "~components/SearchBar"
 import TabBar, { type Tab } from "~components/TabBar"
-import { chatUrl, matchesUrlList } from "~config"
+import { baseUrl, chatUrl, matchesUrl, matchesUrlList } from "~config"
 import {
   type Bookmark,
   getActiveId,
@@ -27,8 +27,9 @@ import theme from "~utils/theme"
 import $ from "~utils/dom/selector"
 import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 
+
 export const config: PlasmoCSConfig = {
-  matches: matchesUrlList
+  matches: ["https://chatgpt.com/*"]
 }
 
 // Inject into the ShadowDOM

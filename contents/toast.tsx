@@ -6,7 +6,7 @@ import { appStore } from "~model/app"
 import { createStyles } from "~utils/base"
 
 export const config: PlasmoCSConfig = {
-  matches: matchesUrlList
+  matches: ["https://chatgpt.com/*"]
 }
 
 const Toast = ({ duration = 2500 }) => {

@@ -1,5 +1,6 @@
 export const baseUrl = "https://chatgpt.com/"
 
+export const matchesUrl = `${baseUrl}*`
 export const matchesUrlList = [`${baseUrl}*`]
 
 export const chatUrl = `${baseUrl}c/`

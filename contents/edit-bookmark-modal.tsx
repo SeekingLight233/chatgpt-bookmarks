@@ -19,7 +19,7 @@ import { createStyles } from "~utils/base"
 import { matchesUrlList } from "~config"
 
 export const config: PlasmoCSConfig = {
-  matches: matchesUrlList
+  matches: ["https://chatgpt.com/*"]
 }
 
 export const getShadowHostId = () => "edit-bookmark-modal"
