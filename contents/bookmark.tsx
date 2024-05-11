@@ -18,12 +18,13 @@ import {
   scrollIntoBookmark,
   sideBarStore
 } from "~model/sidebar"
-import { getAncestor, getQuestionTitle } from "~utils/dom"
+import { checkAttributeInDOM, getAncestor, getQuestionTitle } from "~utils/dom"
 import { useHover } from "~utils/hooks/useHover"
 import theme from "~utils/theme"
 import { domWithBookmarkidMap } from "~utils/dom/domIdMap"
 import $ from "~utils/dom/selector"
 import { noRecommendedDVallue } from "~config"
+import { throttleLog } from "~utils/devUtils"
 
 const Bookmark = () => {
   const { isHovered, handleMouseEnter, handleMouseLeave } = useHover();
@@ -119,13 +120,13 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
 
   btmToolsDoms.forEach((element, idx) => {
     const anchorNode = $.getFirstSvgByDValue(element, noRecommendedDVallue)?.parentElement?.parentElement;
-
-    const isAnswer = idx % 2 !== 0;
+    const parentDom = getAncestor(anchorNode, 6);
+    const isAnswer = checkAttributeInDOM(parentDom, "data-message-author-role", "assistant");
+    
     const elementWithbookmarkId = anchorNode?.parentElement as ElementWithbookmarkId;
     if (anchorNode && isAnswer) {
       elementWithbookmarkId.bookmarkId = idx;
 
-      const parentDom = getAncestor(anchorNode, 6);
       const conversationDom = parentDom.querySelector('div[data-message-author-role="assistant"]');
 
       // set conversationDom to Id at this time

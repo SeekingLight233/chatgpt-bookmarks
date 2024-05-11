@@ -43,11 +43,27 @@ export function getQuestionTitle(bookmarkId: number) {
 export const getAncestor = (dom, level): Element => {
   let currentElement = dom;
   for (let i = 0; i < level; i++) {
-    if (currentElement.parentElement) {
-      currentElement = currentElement.parentElement;
+    if (currentElement?.parentElement) {
+      currentElement = currentElement?.parentElement;
     } else {
       return null;
     }
   }
   return currentElement;
 };
+
+export function checkAttributeInDOM(parent: Element, attr: string, attrVal: string): boolean {
+  const targetVal = parent?.getAttribute(attr);
+  if (targetVal && (targetVal === attrVal)) {
+    return true;
+  }
+  const children = parent?.children ?? [];
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+    if (checkAttributeInDOM(child as Element, attr, attrVal)) {
+      return true;
+    }
+  }
+
+  return false;
+}
