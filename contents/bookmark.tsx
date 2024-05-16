@@ -105,7 +105,7 @@ const styles = createStyles({
     alignItems: "center",
     borderRadius: "0.375rem",
     cursor: "pointer",
-    marginTop: 1
+    marginTop: 3
   }
 })
 
@@ -119,10 +119,10 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
   const nodeList: Element[] = []
 
   btmToolsDoms.forEach((element, idx) => {
-    const anchorNode = $.getFirstSvgByDValue(element, noRecommendedDVallue)?.parentElement?.parentElement;
+    const anchorNode = $.getFirstSvgByDValue(element, noRecommendedDVallue)?.parentElement?.parentElement?.parentElement;
     const parentDom = getAncestor(anchorNode, 6);
     const isAnswer = checkAttributeInDOM(parentDom, "data-message-author-role", "assistant");
-    
+
     const elementWithbookmarkId = anchorNode?.parentElement as ElementWithbookmarkId;
     if (anchorNode && isAnswer) {
       elementWithbookmarkId.bookmarkId = idx;
