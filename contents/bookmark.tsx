@@ -120,7 +120,6 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
 
   btmToolsDoms.forEach((element, idx) => {
     const anchorNode = $.getFirstSvgByDValue(element, noRecommendedDVallue)?.parentElement?.parentElement?.parentElement;
-    console.log("anchorNode====",anchorNode);
     
     const parentDom = getAncestor(anchorNode, 6);
     const isAnswer = checkAttributeInDOM(parentDom, "data-message-author-role", "assistant");
