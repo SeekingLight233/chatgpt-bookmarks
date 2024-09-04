@@ -1,4 +1,4 @@
-import type { PlasmoCSConfig } from "plasmo"
+import type { PlasmoCSConfig, PlasmoGetOverlayAnchor } from "plasmo"
 import React, { useState } from "react"
 
 import "./styles/base.css"
@@ -143,3 +143,7 @@ const styles = createStyles({
 })
 
 export default EditBookmarkModal
+
+export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () => {
+  return document.querySelector("body")
+}

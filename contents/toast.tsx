@@ -1,4 +1,4 @@
-import type { PlasmoCSConfig } from "plasmo"
+import type { PlasmoCSConfig, PlasmoGetOverlayAnchor } from "plasmo"
 import React, { useEffect, useState } from "react"
 import { matchesUrlList } from "~config"
 
@@ -42,3 +42,7 @@ const styles = createStyles({
 })
 
 export default Toast
+
+export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () => {
+  return document.querySelector("body")
+}

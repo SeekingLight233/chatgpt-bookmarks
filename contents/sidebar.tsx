@@ -1,5 +1,5 @@
 import cssText from "data-text:~/contents/styles/sidebar.css"
-import type { PlasmoCSConfig } from "plasmo"
+import type { PlasmoCSConfig, PlasmoGetOverlayAnchor } from "plasmo"
 import { useEffect, useState } from "react"
 
 import "./styles/base.css"
@@ -241,3 +241,7 @@ const styles = createStyles({
 })
 
 export default Sidebar
+
+export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () => {
+  return document.querySelector("body")
+}
